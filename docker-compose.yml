@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27018"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: moments_admin
+      MONGO_INITDB_ROOT_PASSWORD: moments_admin
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
