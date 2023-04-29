@@ -5,8 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MomentsApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(MomentsApplication.class, args);
-	}
+
+  public static void main(String[] args) {
+    SpringApplication.run(MomentsApplication.class, args);
+  }
 
 }

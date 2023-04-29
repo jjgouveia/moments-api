@@ -1,42 +1,30 @@
-package com.api.moments.persistence.entities;
+package com.api.moments.models;
 
-import java.util.UUID;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
-public class Moment {
+import java.util.UUID;
 
+@Data
+@Document
+public class MomentModel {
   @Id
   private UUID id;
-
   private String title;
   private String description;
 
-  // public Moments(
-  //   String title,
-  //   String description,
-  //   String image,
-  //   LocalDate date,
-  //   String author,
-  //   String likes,
-  //   String comments
-  // ) {
-  //   this.setId();
-  //   this.title = title;
-  //   this.description = description;
-  //   this.image = image;
-  //   this.date = date;
-  //   this.author = author;
-  //   this.likes = likes;
-  //   this.comments = comments;
-  // }
+  public MomentModel(String title, String description) {
+    setId();
+    this.title = title;
+    this.description = description;
+  }
 
   public UUID getId() {
     return id;
   }
 
-  protected void setId() {
+  public void setId() {
     this.id = UUID.randomUUID();
   }
 
