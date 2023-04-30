@@ -15,7 +15,6 @@ public class MomentServiceImpl implements MomentService {
 
   @Override
   public Moment create(Moment moment) {
-
     return this.momentRepository.save(moment);
   }
 
