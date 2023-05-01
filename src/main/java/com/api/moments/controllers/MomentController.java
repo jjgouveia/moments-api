@@ -35,18 +35,18 @@ public class MomentController {
 
   @GetMapping
   public List<Moment> getAllMoments() {
+
     return this.momentService.getAll();
   }
 
   @GetMapping("/{imageId}")
   public ResponseEntity<Resource> downloadImage(@PathVariable String imageId) throws IOException {
-    // Obtém a imagem do GridFS
     GridFSFile file =
         gridFsTemplate.findOne(new Query(Criteria.where("_id").is(new ObjectId(imageId))));
     if (file == null) {
       return ResponseEntity.notFound().build();
     }
-    // Retorna a imagem como um recurso
+
     GridFsResource resource = gridFsTemplate.getResource(file);
     return ResponseEntity.ok().contentType(MediaType.parseMediaType(resource.getContentType()))
         .body(new InputStreamResource(resource.getInputStream()));
@@ -72,7 +72,5 @@ public class MomentController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
-
-
 
 }

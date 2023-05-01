@@ -15,6 +15,7 @@ public class MomentServiceImpl implements MomentService {
 
   @Override
   public Moment create(CreateMomentRequest createMomentRequest) {
+
     Moment moment = new Moment(createMomentRequest.getTitle(), createMomentRequest.getDescription(),
         createMomentRequest.getImage());
     return this.momentRepository.save(moment);
