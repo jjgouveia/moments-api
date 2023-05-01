@@ -1,4 +1,4 @@
-package com.api.moments.services;
+package com.api.moments.services.moment;
 
 import com.api.moments.persistence.entities.Moment;
 import com.api.moments.persistence.repositories.MomentRepository;
@@ -14,8 +14,12 @@ public class MomentServiceImpl implements MomentService {
   private MomentRepository momentRepository;
 
   @Override
-  public Moment create(Moment moment) {
+  public Moment create(CreateMomentRequest createMomentRequest) {
+    Moment moment = new Moment(createMomentRequest.getTitle(), createMomentRequest.getDescription(),
+        createMomentRequest.getImage());
     return this.momentRepository.save(moment);
+
+
   }
 
   @Override

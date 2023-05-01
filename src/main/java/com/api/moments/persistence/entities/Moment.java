@@ -1,5 +1,6 @@
 package com.api.moments.persistence.entities;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -16,14 +17,23 @@ import java.util.UUID;
 public class Moment {
   @Id
   private UUID id;
+  @NotNull
   private String title;
+  @NotNull
   private String description;
+  @NotNull
+  private String image;
+  private int likes;
   @CreatedDate
   private LocalDateTime date;
 
-  public Moment() {
+  public Moment(String title, String description, String image) {
     this.setId();
     this.date = this.getTimestamp();
+    this.title = title;
+    this.description = description;
+    this.image = image;
+    this.likes = 0;
   }
 
   private LocalDateTime getTimestamp() {
