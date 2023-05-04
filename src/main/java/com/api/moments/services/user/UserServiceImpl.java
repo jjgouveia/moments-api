@@ -3,6 +3,7 @@ package com.api.moments.services.user;
 import com.api.moments.persistence.entities.User;
 import com.api.moments.persistence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +14,15 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
 
   @Override
   public User create(CreateUserRequest createUserRequest) {
-    User user = new User(createUserRequest.getUsername(), createUserRequest.getEmail(),
-        createUserRequest.getPassword());
+
+    User user = new User(createUserRequest.getUsername(), createUserRequest.getEmail());
+    user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
 
     return this.userRepository.save(user);
   }

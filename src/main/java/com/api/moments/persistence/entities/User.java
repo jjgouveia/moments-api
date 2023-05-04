@@ -21,11 +21,10 @@ public class User {
   @CreatedDate
   private LocalDateTime date;
 
-  public User(String username, String email, String password) {
+  public User(String username, String email) {
     this.setId();
     this.username = username;
     this.email = email;
-    this.password = password;
     this.setRole("USER");
     this.date = Timestamp.getTimestamp();
   }

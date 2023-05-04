@@ -28,6 +28,7 @@ public class UserController {
         createUserRequest.getEmail())) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Username or email already exists");
     }
+    
     var response = this.userService.create(createUserRequest);
 
     return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
