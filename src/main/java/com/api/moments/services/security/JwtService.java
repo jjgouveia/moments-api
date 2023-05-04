@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -12,9 +13,12 @@ import java.util.UUID;
 
 @Service
 public class JwtService implements IJwtService {
-  private static final String key =
-      "546A576D5A7134743777217A25432A462D4A614E645267556B58703272357538";
-  private final long EXPIRATION_TIME = 7200000;
+
+  @Value("${app.token.expiration}")
+  private long EXPIRATION_TIME;
+
+  @Value("${app.secret.key}")
+  private String key;
 
   @Override
   public String generateToken(UUID userId) {
