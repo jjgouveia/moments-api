@@ -19,11 +19,11 @@ public class AuthService implements IAuthService {
     var user = userService.getUser(authRequest.getEmail());
 
     if (user == null) {
-      return null;
+      throw new RuntimeException("User not found");
     }
 
     if (!user.getPassword().equals(authRequest.getPassword())) {
-      return null;
+      throw new RuntimeException("Invalid password");
     }
 
 

@@ -21,8 +21,11 @@ public class AuthController {
 
   @PostMapping
   public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
-    System.out.println("AuthController.login" + authRequest);
-
-    return ResponseEntity.status(HttpStatus.OK).body(authService.authenticate(authRequest));
+    try {
+      var response = authService.authenticate(authRequest);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
   }
 }
