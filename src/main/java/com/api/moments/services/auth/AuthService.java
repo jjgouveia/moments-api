@@ -25,9 +25,7 @@ public class AuthService implements IAuthService {
     if (!user.getPassword().equals(authRequest.getPassword())) {
       throw new RuntimeException("Invalid password");
     }
-
-
-
+    
     var token = jwtService.generateToken(user.getId());
 
     var response = new AuthResponse();

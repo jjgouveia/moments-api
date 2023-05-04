@@ -3,6 +3,7 @@ package com.api.moments.controllers;
 import com.api.moments.persistence.entities.Moment;
 import com.api.moments.services.moment.CreateMomentRequest;
 import com.api.moments.services.moment.MomentService;
+import com.api.moments.services.security.IJwtService;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ import java.util.Objects;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/moments")
 public class MomentController {
+
+  @Autowired
+  private IJwtService jwtService;
 
   @Autowired
   private MomentService momentService;
@@ -53,9 +57,18 @@ public class MomentController {
   }
 
   @PostMapping
-  public ResponseEntity<Moment> newMoment(@RequestParam("image") MultipartFile image,
-      @RequestParam("title") String title, @RequestParam("description") String description)
-      throws IOException {
+  public ResponseEntity<Moment> newMoment(
+      @RequestHeader("Authorization") String authorizationHeader,
+      @RequestParam("image") MultipartFile image, @RequestParam("title") String title,
+      @RequestParam("description") String description) throws IOException {
+
+
+    try {
+      jwtService.isValidToken(authorizationHeader);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     var moment = new CreateMomentRequest(title, description);
 
     if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
@@ -65,12 +78,11 @@ public class MomentController {
     ObjectId objectId = gridFsTemplate.store(image.getInputStream(), image.getOriginalFilename(),
         image.getContentType());
 
+    moment.setUserId(jwtService.getUserId(authorizationHeader));
     moment.setImage(objectId.toHexString());
-
 
     var response = this.momentService.create(moment);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
-
 }

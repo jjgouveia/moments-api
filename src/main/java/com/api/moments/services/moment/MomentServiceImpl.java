@@ -25,7 +25,7 @@ public class MomentServiceImpl implements MomentService {
   public Moment create(CreateMomentRequest createMomentRequest) {
 
     Moment moment = new Moment(createMomentRequest.getTitle(), createMomentRequest.getDescription(),
-        createMomentRequest.getImage(), mockUserId);
+        createMomentRequest.getImage(), createMomentRequest.getUserId());
 
     this.eventService.send("new-post", "Moment created: " + moment);
     return this.momentRepository.save(moment);
