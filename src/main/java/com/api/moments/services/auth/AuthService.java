@@ -20,6 +20,10 @@ public class AuthService implements IAuthService {
 
   @Override
   public AuthResponse authenticate(AuthRequest authRequest) {
+
+    if (authRequest.getEmail() == null || authRequest.getPassword() == null)
+      throw new IllegalArgumentException("Email or password is null");
+
     var user = userService.getUser(authRequest.getEmail());
 
     if (user == null) {

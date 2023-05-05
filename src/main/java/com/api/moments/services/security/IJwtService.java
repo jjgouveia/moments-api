@@ -7,7 +7,7 @@ import java.util.UUID;
 public interface IJwtService {
   String generateToken(UUID userId);
 
-  void isValidToken(String token) throws InvalidTokenException;
+  boolean isValidToken(String token) throws InvalidTokenException;
 
   UUID getUserId(String token);
 }

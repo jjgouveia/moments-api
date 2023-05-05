@@ -34,7 +34,7 @@ public class JwtService implements IJwtService {
     return Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
   }
 
-  public void isValidToken(String token) throws InvalidTokenException {
+  public boolean isValidToken(String token) throws InvalidTokenException {
     String tokenizer = token.replace("Bearer ", "");
 
     try {
@@ -52,6 +52,7 @@ public class JwtService implements IJwtService {
     } catch (JwtException e) {
       throw new InvalidTokenException("Invalid token");
     }
+    return false;
   }
 
   @Override

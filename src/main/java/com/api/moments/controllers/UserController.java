@@ -22,13 +22,13 @@ public class UserController {
     return this.userService.getAll();
   }
 
-  @PostMapping
+  @PostMapping("/new")
   public ResponseEntity<String> newUser(@RequestBody CreateUserRequest createUserRequest) {
     if (this.userService.existsByUsernameAndEmail(createUserRequest.getUsername(),
         createUserRequest.getEmail())) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body("Username or email already exists");
     }
-    
+
     var response = this.userService.create(createUserRequest);
 
     return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");

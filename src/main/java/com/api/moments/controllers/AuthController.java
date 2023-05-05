@@ -24,6 +24,13 @@ public class AuthController {
       var response = authService.authenticate(authRequest);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception e) {
+      if (e.getMessage().equals("Email or password is null"))
+        System.out.println(e.getMessage());
+      else if (e.getMessage().equals("User not found"))
+        System.out.println(e.getMessage());
+      else if (e.getMessage().equals("Invalid password"))
+        System.out.println(e.getMessage());
+
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
   }

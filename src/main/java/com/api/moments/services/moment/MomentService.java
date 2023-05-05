@@ -8,4 +8,6 @@ public interface MomentService {
   Moment create(CreateMomentRequest createMomentRequest);
 
   List<Moment> getAll();
+
+  
 }
