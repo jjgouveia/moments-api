@@ -12,10 +12,6 @@ import java.util.UUID;
 
 @Service
 public class MomentServiceImpl implements MomentService {
-
-
-
-  private final UUID mockUserId = UUID.fromString("9fee7c16-d941-4a61-9297-710e0bc4a73a");
   @Autowired
   private MomentRepository momentRepository;
   @Autowired
@@ -36,5 +32,8 @@ public class MomentServiceImpl implements MomentService {
     return this.momentRepository.findAll();
   }
 
-
+  @Override
+  public Moment getById(UUID id) {
+    return this.momentRepository.findById(id).orElse(null);
+  }
 }

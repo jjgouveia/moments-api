@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -43,7 +44,13 @@ public class MomentController {
     return this.momentService.getAll();
   }
 
-  @GetMapping("/{imageId}")
+  @GetMapping("/{momentId}")
+  public Moment getMomentById(@PathVariable UUID momentId) {
+    System.out.println("momentId: " + momentId);
+    return this.momentService.getById(momentId);
+  }
+
+  @GetMapping("/image/{imageId}")
   public ResponseEntity<Resource> downloadImage(@PathVariable String imageId) throws IOException {
     GridFSFile file =
         gridFsTemplate.findOne(new Query(Criteria.where("_id").is(new ObjectId(imageId))));
