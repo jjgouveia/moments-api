@@ -36,4 +36,20 @@ public class MomentServiceImpl implements MomentService {
   public Moment getById(UUID id) {
     return this.momentRepository.findById(id).orElse(null);
   }
+
+  @Override
+  public void update(UUID id, Moment updateMomentRequest) {
+    Moment moment = this.momentRepository.findById(id).orElse(null);
+
+    if (moment != null) {
+      moment.setTitle(updateMomentRequest.getTitle());
+      moment.setDescription(updateMomentRequest.getDescription());
+      moment.setImage(updateMomentRequest.getImage());
+      moment.setLikes(updateMomentRequest.getLikes());
+
+      this.momentRepository.save(moment);
+    } else {
+      throw new RuntimeException("Moment not found");
+    }
+  }
 }

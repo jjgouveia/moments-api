@@ -1,11 +1,8 @@
 package com.api.moments.services.like;
 
 import com.api.moments.persistence.entities.Moment;
-import com.api.moments.persistence.repositories.LikeRepository;
-import com.api.moments.persistence.repositories.MomentRepository;
 import com.api.moments.services.moment.MomentService;
 import com.api.moments.services.security.IJwtService;
-import com.api.moments.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,44 +15,35 @@ public class LikeService implements ILikeService {
   private MomentService momentService;
 
   @Autowired
-  private MomentRepository momentRepository;
-
-  @Autowired
-  private UserService userService;
-
-  @Autowired
   private IJwtService jwtService;
-
-  @Autowired
-  private LikeRepository likeRepository;
 
 
   @Override
-  public Optional<Moment> addLike(String token, UUID momentId) {
+  public void addLike(String token, UUID momentId) {
     UUID userId = this.jwtService.getUserId(token);
-    Optional<Moment> moment = this.momentRepository.findById(momentId);
+    Optional<Moment> moment = Optional.ofNullable(this.momentService.getById(momentId));
 
     if (moment.isPresent()) {
       Moment moment1 = moment.get();
       if (!moment1.getLikes().contains(userId)) {
         //        moment1.getLikes().add(userId);
         moment1.addLike(userId.toString());
-        this.momentRepository.save(moment1);
+        this.momentService.update(momentId, moment1);
       }
     } else {
       throw new RuntimeException("Moment not found");
     }
-    return moment;
   }
 
   @Override
   public void removeLike(UUID userId, UUID momentId) {
-    Optional<Moment> moment = momentRepository.findById(momentId);
+    Optional<Moment> moment = Optional.ofNullable(this.momentService.getById(momentId));
+
     if (moment.isPresent()) {
       Moment moment1 = moment.get();
       if (moment1.getLikes().contains(userId)) {
         moment1.getLikes().remove(userId);
-        this.momentRepository.save(moment1);
+        this.momentService.update(momentId, moment1);
 
       }
     } else {
