@@ -19,7 +19,18 @@ public class LikeController {
       @RequestHeader("Authorization") String token) {
     try {
       likeService.addLike(token, momentId);
-      return ResponseEntity.status(HttpStatus.CREATED).build();
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+  }
+
+  @PostMapping("/{momentId}/remove")
+  public ResponseEntity<String> removeLike(@PathVariable UUID momentId,
+      @RequestHeader("Authorization") String token) {
+    try {
+      likeService.removeLike(token, momentId);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }

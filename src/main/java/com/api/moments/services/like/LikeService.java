@@ -1,6 +1,8 @@
 package com.api.moments.services.like;
 
+import com.api.moments.persistence.entities.Like;
 import com.api.moments.persistence.entities.Moment;
+import com.api.moments.persistence.repositories.LikeRepository;
 import com.api.moments.services.moment.MomentService;
 import com.api.moments.services.security.IJwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class LikeService implements ILikeService {
   @Autowired
   private IJwtService jwtService;
 
+  @Autowired
+  private LikeRepository likeRepository;
+
 
   @Override
   public void addLike(String token, UUID momentId) {
@@ -26,8 +31,9 @@ public class LikeService implements ILikeService {
     if (moment.isPresent()) {
       Moment moment1 = moment.get();
       if (!moment1.getLikes().contains(userId)) {
-        //        moment1.getLikes().add(userId);
-        moment1.addLike(userId.toString());
+        moment1.getLikes().add(userId);
+        Like like = new Like(userId, momentId);
+        this.likeRepository.save(like);
         this.momentService.update(momentId, moment1);
       }
     } else {
@@ -36,15 +42,17 @@ public class LikeService implements ILikeService {
   }
 
   @Override
-  public void removeLike(UUID userId, UUID momentId) {
+  public void removeLike(String token, UUID momentId) {
+    UUID userId = this.jwtService.getUserId(token);
     Optional<Moment> moment = Optional.ofNullable(this.momentService.getById(momentId));
 
     if (moment.isPresent()) {
       Moment moment1 = moment.get();
       if (moment1.getLikes().contains(userId)) {
         moment1.getLikes().remove(userId);
+        Like like = this.likeRepository.findByMomentIdAndUserId(momentId, userId);
+        this.likeRepository.delete(like);
         this.momentService.update(momentId, moment1);
-
       }
     } else {
       throw new RuntimeException("Moment not found");
@@ -52,11 +60,13 @@ public class LikeService implements ILikeService {
   }
 
   @Override
-  public boolean hasLiked(UUID userId, UUID momentId) {
-    Moment optionalMoment = this.momentService.getById(momentId);
-    if (optionalMoment != null && optionalMoment.getId().toString().equals(momentId.toString())) {
-      Moment moment = optionalMoment;
-      return moment.getLikes().contains(userId.toString());
+  public boolean hasLiked(String token, UUID momentId) {
+    UUID userId = this.jwtService.getUserId(token);
+    Optional<Moment> moment = Optional.ofNullable(this.momentService.getById(momentId));
+
+    if (moment.isPresent()) {
+      Moment moment1 = moment.get();
+      return moment1.getLikes().contains(userId);
     } else {
       throw new RuntimeException("Moment not found");
     }

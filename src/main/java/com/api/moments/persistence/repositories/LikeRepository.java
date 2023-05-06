@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.UUID;
 
 public interface LikeRepository extends MongoRepository<Like, UUID> {
-  Like findByMomentIdAndUserId(UUID userId, UUID momentId);
+  Like findByMomentIdAndUserId(UUID momentId, UUID userId);
 }
