@@ -13,4 +13,6 @@ public interface MomentService {
   Moment getById(UUID id);
 
   void update(UUID id, Moment updateMomentRequest);
+
+  List<Moment> getMomentsByOrderDescThroughUserId(UUID userId);
 }

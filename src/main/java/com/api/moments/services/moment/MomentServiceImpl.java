@@ -53,4 +53,9 @@ public class MomentServiceImpl implements MomentService {
       throw new RuntimeException("Moment not found");
     }
   }
+
+  @Override
+  public List<Moment> getMomentsByOrderDescThroughUserId(UUID userId) {
+    return this.momentRepository.findByUserIdOrderByDateDesc(userId);
+  }
 }
