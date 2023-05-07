@@ -2,6 +2,7 @@ package com.api.moments.services.user;
 
 import com.api.moments.persistence.entities.User;
 import com.api.moments.persistence.repositories.UserRepository;
+import com.api.moments.services.follow.IFollowService;
 import com.api.moments.services.security.IJwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private IJwtService jwtService;
+
+    @Autowired
+    private IFollowService followService;
 
 
     @Override
@@ -78,23 +82,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addFollow(String token, String followId) {
-        UUID userId = this.jwtService.getUserId(token);
-        Optional<User> me = this.userRepository.findById(userId);
-        Optional<User> user = Optional.ofNullable(this.userRepository.findByUsername(followId));
+    public void addFollow(String followerToken, String username) {
+        UUID followerId = this.jwtService.getUserId(followerToken);
+        Optional<User> follower = this.userRepository.findById(followerId);
+        Optional<User> followedUser = Optional.ofNullable(this.userRepository.findByUsername(username));
 
-        if (user.isPresent() && userId.equals(user.get().getId())) {
+        if (followedUser.isPresent() && followerId.equals(followedUser.get().getId())) {
             throw new RuntimeException("Hey, self love is important, but you can't follow yourself here!");
         }
 
-        if (user.isPresent() && me.isPresent()) {
-            User user1 = user.get();
-            User me1 = me.get();
-            if (!user1.getFollowers().contains(userId)) {
-                me1.getFollowing().add(user1.getId());
-                user1.getFollowers().add(userId);
-                this.userRepository.save(user1);
-                this.userRepository.save(me1);
+        if (followedUser.isPresent() && follower.isPresent()) {
+            User userIWantToFollow = followedUser.get();
+            User userThatFollows = follower.get();
+            if (!userIWantToFollow.getFollowers().contains(followerId)) {
+                userThatFollows.getFollowing().add(userIWantToFollow.getId());
+                userIWantToFollow.getFollowers().add(followerId);
+                this.userRepository.save(userIWantToFollow);
+                this.userRepository.save(userThatFollows);
+                this.followService.saveFollow(followerId, userIWantToFollow.getId());
             }
         } else {
             throw new RuntimeException("User not found");
