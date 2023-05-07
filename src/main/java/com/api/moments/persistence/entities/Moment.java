@@ -28,6 +28,8 @@ public class Moment {
 
   private List<UUID> likes;
 
+  private List<Comment> comments;
+
   @CreatedDate
   private LocalDateTime date;
 
@@ -38,6 +40,7 @@ public class Moment {
     this.description = description;
     this.image = image;
     this.likes = new ArrayList<>();
+    this.comments = new ArrayList<>();
     this.setUserId(userId);
 
   }
@@ -48,14 +51,6 @@ public class Moment {
 
   public void setId() {
     this.id = UUID.randomUUID();
-  }
-
-  public void addLike(String userId) {
-    if (!this.likes.contains(UUID.fromString(userId))) {
-      List<UUID> updatedLikes = new ArrayList<>(this.likes);
-      updatedLikes.add(UUID.fromString(userId));
-      this.likes = updatedLikes;
-    }
   }
 }
 
