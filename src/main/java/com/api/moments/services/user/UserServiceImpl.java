@@ -91,23 +91,51 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Hey, self love is important, but you can't follow yourself here!");
         }
 
+        if (followedUser.isPresent() && followedUser.get().getFollowers().contains(followerId)) {
+            throw new RuntimeException("Ops, I know you love her/him, but you already follow this user!");
+        }
+
         if (followedUser.isPresent() && follower.isPresent()) {
             User userIWantToFollow = followedUser.get();
             User userThatFollows = follower.get();
-            if (!userIWantToFollow.getFollowers().contains(followerId)) {
-                userThatFollows.getFollowing().add(userIWantToFollow.getId());
-                userIWantToFollow.getFollowers().add(followerId);
-                this.userRepository.save(userIWantToFollow);
-                this.userRepository.save(userThatFollows);
-                this.followService.saveFollow(followerId, userIWantToFollow.getId());
-            }
+            userThatFollows.getFollowing().add(userIWantToFollow.getId());
+            userIWantToFollow.getFollowers().add(followerId);
+            this.userRepository.save(userIWantToFollow);
+            this.userRepository.save(userThatFollows);
+            this.followService.saveFollow(followerId, userIWantToFollow.getId());
+
         } else {
             throw new RuntimeException("User not found");
         }
     }
 
     @Override
-    public void removeFollow(String token, String followId) {
+    public void removeFollow(String followerToken, String username) {
+        UUID followerId = this.jwtService.getUserId(followerToken);
+        Optional<User> follower = this.userRepository.findById(followerId);
+        Optional<User> followedUser = Optional.ofNullable(this.userRepository.findByUsername(username));
+
+        if (followedUser.isPresent() && followerId.equals(followedUser.get().getId())) {
+            throw new RuntimeException("Hey, I do not to be rude, but you can't unfollow yourself here, ok? Not even in real life!");
+        }
+
+        if (followedUser.isPresent() && !followedUser.get().getFollowers().contains(followerId)) {
+            throw new RuntimeException("Ops, I comprehend that you don't like this user, but you can't unfollow someone you don't even follow!");
+        }
+
+        if (followedUser.isPresent() && follower.isPresent()) {
+            User userIWantToFollow = followedUser.get();
+            User userThatFollows = follower.get();
+            if (userIWantToFollow.getFollowers().contains(followerId)) {
+                userThatFollows.getFollowing().remove(userIWantToFollow.getId());
+                userIWantToFollow.getFollowers().remove(followerId);
+                this.followService.deleteFollow(followerId, userIWantToFollow.getId());
+                this.userRepository.save(userIWantToFollow);
+                this.userRepository.save(userThatFollows);
+            }
+        } else {
+            throw new RuntimeException("User not found");
+        }
 
     }
 

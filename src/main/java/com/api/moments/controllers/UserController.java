@@ -34,14 +34,31 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
-    @PostMapping("{userId}/follow")
-    public ResponseEntity<String> followUser(@PathVariable String userId,
+    @PostMapping("{username}/follow")
+    public ResponseEntity<String> followUser(@PathVariable String username,
                                              @RequestHeader("Authorization") String token) {
         try {
-            this.userService.addFollow(token, userId);
+            this.userService.addFollow(token, username);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            if (e.getMessage().equals("User not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("{username}/unfollow")
+    public ResponseEntity<String> unfollowUser(@PathVariable String username,
+                                               @RequestHeader("Authorization") String token) {
+        try {
+            this.userService.removeFollow(token, username);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            if (e.getMessage().equals("User not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
