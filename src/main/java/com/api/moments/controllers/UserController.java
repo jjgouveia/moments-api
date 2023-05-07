@@ -14,23 +14,35 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("moments/users")
 public class UserController {
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @GetMapping
-  public List<User> getAllUsers() {
-    return this.userService.getAll();
-  }
-
-  @PostMapping("/new")
-  public ResponseEntity<String> newUser(@RequestBody CreateUserRequest createUserRequest) {
-    if (this.userService.existsByUsernameAndEmail(createUserRequest.getUsername(),
-        createUserRequest.getEmail())) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Username or email already exists");
+    @GetMapping
+    public List<User> getAllUsers() {
+        return this.userService.getAll();
     }
 
-    var response = this.userService.create(createUserRequest);
+    @PostMapping("/new")
+    public ResponseEntity<String> newUser(@RequestBody CreateUserRequest createUserRequest) {
+        if (this.userService.existsByUsernameAndEmail(createUserRequest.getUsername(),
+                createUserRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username or email already exists");
+        }
 
-    return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
-  }
+        var response = this.userService.create(createUserRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+    }
+
+    @PostMapping("{userId}/follow")
+    public ResponseEntity<String> followUser(@PathVariable String userId,
+                                             @RequestHeader("Authorization") String token) {
+        try {
+            this.userService.addFollow(token, userId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 }
