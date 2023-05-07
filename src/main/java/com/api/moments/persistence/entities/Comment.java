@@ -22,7 +22,7 @@ public class Comment {
   private UUID userId;
   private LocalDateTime createdAt;
 
-  public Comment(String content, UUID momentId, UUID userId) {
+  public Comment(String content, UUID userId, UUID momentId) {
     this.setId();
     this.setContent(content);
     this.setMomentId(momentId);

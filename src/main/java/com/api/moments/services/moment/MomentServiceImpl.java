@@ -46,6 +46,7 @@ public class MomentServiceImpl implements MomentService {
       moment.setDescription(updateMomentRequest.getDescription());
       moment.setImage(updateMomentRequest.getImage());
       moment.setLikes(updateMomentRequest.getLikes());
+      moment.setComments(updateMomentRequest.getComments());
 
       this.momentRepository.save(moment);
     } else {
