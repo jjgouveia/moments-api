@@ -11,8 +11,8 @@ public class CreateMomentRequest {
   private String imageUrl;
   private UUID userId;
 
-  public CreateMomentRequest(String title, String description) {
-    this.setUserId();
+  public CreateMomentRequest(String title, String description, UUID userId) {
+    this.userId = userId;
     this.title = title;
     this.description = description;
     this.setImageUrl(this.getImageUrl());

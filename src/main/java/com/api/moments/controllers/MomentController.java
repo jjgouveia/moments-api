@@ -5,7 +5,6 @@ import com.api.moments.services.moment.MomentService;
 import com.api.moments.services.moment.request.CreateMomentRequest;
 import com.api.moments.services.security.IJwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +25,6 @@ public class MomentController {
 
   @Autowired
   private MomentService momentService;
-
-  @Autowired
-  private GridFsTemplate gridFsTemplate;
 
   @GetMapping
   public List<Moment> getAllMoments() {
@@ -52,23 +48,13 @@ public class MomentController {
       @RequestParam("image") MultipartFile image, @RequestParam("title") String title,
       @RequestParam("description") String description) throws IOException {
 
-
     try {
-      jwtService.isValidToken(authorizationHeader);
+      var userId = jwtService.getUserId(authorizationHeader);
+      var createMomentRequest = new CreateMomentRequest(title, description, userId);
+      Moment moment = this.momentService.create(createMomentRequest, image);
+      return ResponseEntity.status(HttpStatus.CREATED).body(moment);
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-
-    var moment = new CreateMomentRequest(title, description);
-
-    if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
-      return ResponseEntity.badRequest().build();
-    }
-
-    moment.setUserId(jwtService.getUserId(authorizationHeader));
-
-    var response = this.momentService.create(moment, image);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 }
