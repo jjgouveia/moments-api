@@ -29,6 +29,10 @@ public class MomentServiceImpl implements MomentService {
   @Override
   public Moment create(CreateMomentRequest createMomentRequest, MultipartFile image) {
 
+    if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
+      throw new RuntimeException("Only images are supported!");
+    }
+
     User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
     var imageUri = "";
@@ -37,14 +41,14 @@ public class MomentServiceImpl implements MomentService {
         createMomentRequest.getImageUrl(), createMomentRequest.getUserId());
 
     try {
-      var fileName = user.getId() + Objects.requireNonNull(image.getOriginalFilename())
+      var fileName = moment.getId() + Objects.requireNonNull(image.getOriginalFilename())
           .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
 
       imageUri = fileUploadService.upload(image, fileName);
       moment.setImageUrl(imageUri);
       this.momentRepository.save(moment);
     } catch (Exception e) {
-      imageUri = "";
+      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
     }
     return moment;
   }
