@@ -1,4 +1,4 @@
-package com.api.moments.services;
+package com.api.moments.services.messaging;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 

@@ -1,4 +1,4 @@
-package com.api.moments.services.auth;
+package com.api.moments.services.auth.response;
 
 import lombok.Data;
 

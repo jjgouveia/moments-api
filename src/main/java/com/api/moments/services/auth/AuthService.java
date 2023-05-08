@@ -1,5 +1,7 @@
 package com.api.moments.services.auth;
 
+import com.api.moments.services.auth.request.AuthRequest;
+import com.api.moments.services.auth.response.AuthResponse;
 import com.api.moments.services.security.IJwtService;
 import com.api.moments.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

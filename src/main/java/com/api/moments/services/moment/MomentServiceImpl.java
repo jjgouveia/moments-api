@@ -2,7 +2,8 @@ package com.api.moments.services.moment;
 
 import com.api.moments.persistence.entities.Moment;
 import com.api.moments.persistence.repositories.MomentRepository;
-import com.api.moments.services.IEventService;
+import com.api.moments.services.messaging.IEventService;
+import com.api.moments.services.moment.request.CreateMomentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

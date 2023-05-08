@@ -14,28 +14,30 @@ import java.util.UUID;
 @Document
 @Data
 public class User {
-    @Id
-    private UUID id;
-    private String username;
-    private String email;
-    private String password;
-    private String role;
-    private List<UUID> followers;
-    private List<UUID> following;
-    @CreatedDate
-    private LocalDateTime date;
+  @Id
+  private UUID id;
+  private String username;
+  private String email;
+  private String password;
+  private String role;
+  private List<UUID> followers;
+  private List<UUID> following;
+  @CreatedDate
+  private LocalDateTime date;
 
-    public User(String username, String email) {
-        this.setId();
-        this.username = username;
-        this.email = email;
-        this.setRole("USER");
-        this.followers = new ArrayList<>();
-        this.following = new ArrayList<>();
-        this.date = Timestamp.getTimestamp();
-    }
+  public User(String username, String email) {
+    this.setId();
+    this.username = username;
+    this.email = email;
+    this.setRole("USER");
+    this.followers = new ArrayList<>();
+    this.following = new ArrayList<>();
+    this.date = Timestamp.getTimestamp();
+  }
 
-    public void setId() {
-        this.id = UUID.randomUUID();
-    }
+  public void setId() {
+    this.id = UUID.randomUUID();
+  }
+
+
 }

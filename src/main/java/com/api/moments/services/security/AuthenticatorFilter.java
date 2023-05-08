@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -58,11 +60,16 @@ public class AuthenticatorFilter extends OncePerRequestFilter {
         return;
       }
 
-      request.setAttribute("user", user);
+      Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      request.setAttribute("userId", user.getId());
       filterChain.doFilter(request, response);
+
+
     } catch (InvalidTokenException e) {
       response.getWriter().write("Invalid token");
       response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
+
   }
 }

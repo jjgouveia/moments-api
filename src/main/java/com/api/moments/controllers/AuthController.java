@@ -1,8 +1,8 @@
 package com.api.moments.controllers;
 
-import com.api.moments.services.auth.AuthRequest;
-import com.api.moments.services.auth.AuthResponse;
 import com.api.moments.services.auth.IAuthService;
+import com.api.moments.services.auth.request.AuthRequest;
+import com.api.moments.services.auth.response.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

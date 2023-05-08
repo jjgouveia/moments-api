@@ -1,5 +1,6 @@
-package com.api.moments.util;
+package com.api.moments.util.config;
 
+import com.api.moments.util.BinaryToStringConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;

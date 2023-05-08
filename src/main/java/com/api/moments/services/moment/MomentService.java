@@ -1,6 +1,7 @@
 package com.api.moments.services.moment;
 
 import com.api.moments.persistence.entities.Moment;
+import com.api.moments.services.moment.request.CreateMomentRequest;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,8 +1,8 @@
 package com.api.moments.controllers;
 
 import com.api.moments.persistence.entities.Moment;
-import com.api.moments.services.moment.CreateMomentRequest;
 import com.api.moments.services.moment.MomentService;
+import com.api.moments.services.moment.request.CreateMomentRequest;
 import com.api.moments.services.security.IJwtService;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import org.bson.types.ObjectId;

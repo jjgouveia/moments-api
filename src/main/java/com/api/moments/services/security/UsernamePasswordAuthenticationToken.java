@@ -1,21 +1,37 @@
 package com.api.moments.services.security;
 
-import com.api.moments.persistence.entities.User;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 
-public class UsernamePasswordAuthenticationToken {
-  private final User user;
-  private final String token;
+import java.util.Collection;
 
-  public UsernamePasswordAuthenticationToken(User user, String token) {
-    this.user = user;
-    this.token = token;
+public class UsernamePasswordAuthenticationToken extends AbstractAuthenticationToken {
+
+  private final Object principal;
+  private final Object credentials;
+
+  public UsernamePasswordAuthenticationToken(Object principal, Object credentials) {
+    super(null);
+    this.principal = principal;
+    this.credentials = credentials;
+    setAuthenticated(false);
   }
 
-  public User getUser() {
-    return user;
+  public UsernamePasswordAuthenticationToken(Object principal, Object credentials,
+      Collection<? extends GrantedAuthority> authorities) {
+    super(authorities);
+    this.principal = principal;
+    this.credentials = credentials;
+    super.setAuthenticated(true); // must use super, as we override
   }
 
-  public String getToken() {
-    return token;
+  public Object getCredentials() {
+    return this.credentials;
+  }
+
+  public Object getPrincipal() {
+    return this.principal;
   }
 }
+
+
