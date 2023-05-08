@@ -1,13 +1,18 @@
 package com.api.moments.services.moment;
 
 import com.api.moments.persistence.entities.Moment;
+import com.api.moments.persistence.entities.User;
 import com.api.moments.persistence.repositories.MomentRepository;
+import com.api.moments.services.fileUpload.IFileUploadService;
 import com.api.moments.services.messaging.IEventService;
 import com.api.moments.services.moment.request.CreateMomentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -18,14 +23,30 @@ public class MomentServiceImpl implements MomentService {
   @Autowired
   private IEventService eventService;
 
+  @Autowired
+  private IFileUploadService fileUploadService;
+
   @Override
-  public Moment create(CreateMomentRequest createMomentRequest) {
+  public Moment create(CreateMomentRequest createMomentRequest, MultipartFile image) {
+
+    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+    var imageUri = "";
 
     Moment moment = new Moment(createMomentRequest.getTitle(), createMomentRequest.getDescription(),
-        createMomentRequest.getImage(), createMomentRequest.getUserId());
+        createMomentRequest.getImageUrl(), createMomentRequest.getUserId());
 
-    this.eventService.send("new-post", "Moment created: " + moment);
-    return this.momentRepository.save(moment);
+    try {
+      var fileName = user.getId() + Objects.requireNonNull(image.getOriginalFilename())
+          .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
+
+      imageUri = fileUploadService.upload(image, fileName);
+      moment.setImageUrl(imageUri);
+      this.momentRepository.save(moment);
+    } catch (Exception e) {
+      imageUri = "";
+    }
+    return moment;
   }
 
   @Override
@@ -45,7 +66,7 @@ public class MomentServiceImpl implements MomentService {
     if (moment != null) {
       moment.setTitle(updateMomentRequest.getTitle());
       moment.setDescription(updateMomentRequest.getDescription());
-      moment.setImage(updateMomentRequest.getImage());
+      moment.setImageUrl(updateMomentRequest.getImageUrl());
       moment.setLikes(updateMomentRequest.getLikes());
       moment.setComments(updateMomentRequest.getComments());
 

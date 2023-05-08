@@ -5,22 +5,29 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: moments_admin
       MONGO_INITDB_ROOT_PASSWORD: moments_admin
     volumes:
       - data:/data
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    restart: always
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
     ports:
-      - 8081:8081
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+      - "8055:8080"
     environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=moments_admin
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=moments_admin
-      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - ./tmp/localstack:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
 
 volumes:
   data: { }

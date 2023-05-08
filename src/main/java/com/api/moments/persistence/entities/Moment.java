@@ -22,7 +22,7 @@ public class Moment {
   @NotNull
   private String description;
   @NotNull
-  private String image;
+  private String imageUrl;
   @NotNull
   private UUID userId;
 
@@ -33,12 +33,12 @@ public class Moment {
   @CreatedDate
   private LocalDateTime date;
 
-  public Moment(String title, String description, String image, UUID userId) {
+  public Moment(String title, String description, String imageUrl, UUID userId) {
     this.setId();
     this.date = Timestamp.getTimestamp();
     this.title = title;
     this.description = description;
-    this.image = image;
+    this.imageUrl = imageUrl;
     this.likes = new ArrayList<>();
     this.comments = new ArrayList<>();
     this.setUserId(userId);
