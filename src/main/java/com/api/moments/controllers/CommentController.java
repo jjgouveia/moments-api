@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/moment/comment")
+@RequestMapping("/api/v1/moment/comment")
 public class CommentController {
   @Autowired
   private ICommentService commentService;
@@ -30,6 +30,17 @@ public class CommentController {
       @PathVariable UUID momentId, @PathVariable UUID commentId) {
     try {
       commentService.deleteComment(token, commentId, momentId);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+  }
+
+  @PostMapping("{momentId}/{commentId}/update")
+  public ResponseEntity<String> updateComment(@RequestHeader("Authorization") String token,
+      @PathVariable UUID momentId, @PathVariable UUID commentId, @RequestParam String content) {
+    try {
+      commentService.updateComment(token, commentId, momentId, content);
       return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

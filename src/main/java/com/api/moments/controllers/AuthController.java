@@ -25,12 +25,11 @@ public class AuthController {
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception e) {
       if (e.getMessage().equals("Email or password is null"))
-        System.out.println(e.getMessage());
+        throw new IllegalArgumentException("Email or password is null");
       else if (e.getMessage().equals("User not found"))
-        System.out.println(e.getMessage());
+        throw new IllegalArgumentException("User not found");
       else if (e.getMessage().equals("Invalid password"))
-        System.out.println(e.getMessage());
-
+        throw new IllegalArgumentException("Invalid password");
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
   }

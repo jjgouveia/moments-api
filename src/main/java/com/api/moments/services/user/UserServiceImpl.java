@@ -7,6 +7,7 @@ import com.api.moments.services.security.IJwtService;
 import com.api.moments.services.user.request.CreateUserRequest;
 import com.api.moments.services.user.request.UpdateUserRequest;
 import com.api.moments.services.user.response.UserResponse;
+import com.api.moments.util.validators.Validators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,21 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User create(CreateUserRequest createUserRequest) {
+    if (!Validators.isValidEmail(createUserRequest.getEmail()))
+      throw new IllegalArgumentException("You should provide a valid email");
+
+    if (!Validators.isValidPassword(createUserRequest.getPassword()))
+      throw new IllegalArgumentException(
+          "You should provide a password with at least 6 characters");
+
+    if (!Validators.isValidUsername(createUserRequest.getUsername()))
+      throw new IllegalArgumentException(
+          "You should provide a username with at least 3 characters");
+
+    if (this.existsByUsernameAndEmail(createUserRequest.getUsername(),
+        createUserRequest.getEmail())) {
+      throw new RuntimeException("Username or email already exists");
+    }
 
     User user = new User(createUserRequest.getUsername(), createUserRequest.getEmail());
     user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));

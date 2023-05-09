@@ -35,14 +35,13 @@ public class UserController {
 
   @PostMapping("/new")
   public ResponseEntity<String> newUser(@RequestBody CreateUserRequest createUserRequest) {
-    if (this.userService.existsByUsernameAndEmail(createUserRequest.getUsername(),
-        createUserRequest.getEmail())) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Username or email already exists");
+    try {
+      this.userService.create(createUserRequest);
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    var response = this.userService.create(createUserRequest);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
   }
 
   @PostMapping("{username}/follow")
