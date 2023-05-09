@@ -1,6 +1,7 @@
 package com.api.moments.persistence.repositories;
 
 import com.api.moments.persistence.entities.Moment;
+import com.api.moments.services.moment.response.MomentResponse;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface MomentRepository extends MongoRepository<Moment, UUID> {
-    List<Moment> findByUserIdOrderByDateDesc(UUID userId);
+    List<MomentResponse> findByUserIdOrderByDateDesc(UUID userId);
 }

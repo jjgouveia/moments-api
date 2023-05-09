@@ -9,43 +9,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/moment/comment")
-public class CommentController {
-  @Autowired
-  private ICommentService commentService;
+public class CommentController extends BaseController {
+    @Autowired
+    private ICommentService commentService;
 
-  @PostMapping("/{momentId}")
-  public ResponseEntity<String> addComment(@RequestParam String content,
-      @RequestHeader("Authorization") String token, @PathVariable UUID momentId) {
-    try {
-      commentService.createComment(content, token, momentId);
-      return ResponseEntity.status(HttpStatus.CREATED).build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    @PostMapping("/{momentId}/comment")
+    public ResponseEntity<String> addComment(@RequestParam String content,
+                                             @RequestHeader("Authorization") String token, @PathVariable UUID momentId) {
+        try {
+            commentService.createComment(content, token, momentId);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-  }
 
-  @PostMapping("{momentId}/{commentId}/remove")
-  public ResponseEntity<String> removeComment(@RequestHeader("Authorization") String token,
-      @PathVariable UUID momentId, @PathVariable UUID commentId) {
-    try {
-      commentService.deleteComment(token, commentId, momentId);
-      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    @PostMapping("{momentId}/comment/{commentId}/remove")
+    public ResponseEntity<String> removeComment(@RequestHeader("Authorization") String token,
+                                                @PathVariable UUID momentId, @PathVariable UUID commentId) {
+        try {
+            commentService.deleteComment(token, commentId, momentId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-  }
 
-  @PostMapping("{momentId}/{commentId}/update")
-  public ResponseEntity<String> updateComment(@RequestHeader("Authorization") String token,
-      @PathVariable UUID momentId, @PathVariable UUID commentId, @RequestParam String content) {
-    try {
-      commentService.updateComment(token, commentId, momentId, content);
-      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    @PostMapping("{momentId}/comment/{commentId}/update")
+    public ResponseEntity<String> updateComment(@RequestHeader("Authorization") String token,
+                                                @PathVariable UUID momentId, @PathVariable UUID commentId, @RequestParam String content) {
+        try {
+            commentService.updateComment(token, commentId, momentId, content);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-  }
 
 
 }
