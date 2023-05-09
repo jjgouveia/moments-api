@@ -4,35 +4,37 @@ import com.api.moments.services.like.ILikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/moment/like")
-public class LikeController {
-  @Autowired
-  private ILikeService likeService;
+public class LikeController extends BaseController {
+    @Autowired
+    private ILikeService likeService;
 
-  @PostMapping("/{momentId}")
-  public ResponseEntity<String> addLike(@PathVariable UUID momentId,
-      @RequestHeader("Authorization") String token) {
-    try {
-      likeService.addLike(token, momentId);
-      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    @PostMapping("/{momentId}/like")
+    public ResponseEntity<String> addLike(@PathVariable UUID momentId,
+                                          @RequestHeader("Authorization") String token) {
+        try {
+            likeService.addLike(token, momentId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-  }
 
-  @PostMapping("/{momentId}/remove")
-  public ResponseEntity<String> removeLike(@PathVariable UUID momentId,
-      @RequestHeader("Authorization") String token) {
-    try {
-      likeService.removeLike(token, momentId);
-      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    @PostMapping("/{momentId}/like/remove")
+    public ResponseEntity<String> removeLike(@PathVariable UUID momentId,
+                                             @RequestHeader("Authorization") String token) {
+        try {
+            likeService.removeLike(token, momentId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-  }
 }

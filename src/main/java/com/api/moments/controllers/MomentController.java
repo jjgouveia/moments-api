@@ -16,45 +16,53 @@ import java.util.Objects;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/moments")
-public class MomentController {
+public class MomentController extends BaseController {
 
-  @Autowired
-  private IJwtService jwtService;
+    @Autowired
+    private IJwtService jwtService;
 
-  @Autowired
-  private MomentService momentService;
+    @Autowired
+    private MomentService momentService;
 
-  @GetMapping
-  public List<Moment> getAllMoments() {
+    @GetMapping("/all")
+    public List<Moment> getAllMoments() {
 
-    return this.momentService.getAll();
-  }
-
-  @GetMapping("/{momentId}")
-  public ResponseEntity<Moment> getMomentById(@PathVariable UUID momentId) {
-    Moment moment = this.momentService.getById(momentId);
-    if (Objects.isNull(moment)) {
-      return ResponseEntity.notFound().build();
+        return this.momentService.getAll();
     }
-    return ResponseEntity.ok(moment);
-  }
 
-
-  @PostMapping
-  public ResponseEntity<Moment> newMoment(
-      @RequestHeader("Authorization") String authorizationHeader,
-      @RequestParam("image") MultipartFile image, @RequestParam("title") String title,
-      @RequestParam("description") String description) throws IOException {
-
-    try {
-      var userId = jwtService.getUserId(authorizationHeader);
-      var createMomentRequest = new CreateMomentRequest(title, description, userId);
-      Moment moment = this.momentService.create(createMomentRequest, image);
-      return ResponseEntity.status(HttpStatus.CREATED).body(moment);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @GetMapping("/{momentId}")
+    public ResponseEntity<Moment> getMomentById(@PathVariable UUID momentId) {
+        Moment moment = this.momentService.getById(momentId);
+        if (Objects.isNull(moment)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(moment);
     }
-  }
+
+
+    @PostMapping("/new-moment")
+    public ResponseEntity<Moment> newMoment(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestParam("image") MultipartFile image, @RequestParam("title") String title,
+            @RequestParam("description") String description) throws IOException {
+
+        try {
+            var userId = jwtService.getUserId(authorizationHeader);
+            var createMomentRequest = new CreateMomentRequest(title, description, userId);
+            Moment moment = this.momentService.create(createMomentRequest, image);
+            return ResponseEntity.status(HttpStatus.CREATED).body(moment);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/{momentId}")
+    public ResponseEntity<String> deleteMoment(@PathVariable UUID momentId) {
+        try {
+            this.momentService.delete(momentId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
