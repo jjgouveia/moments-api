@@ -15,42 +15,42 @@ import java.util.UUID;
 @Data
 @Document
 public class Moment {
-  @Id
-  private UUID id;
-  @NotNull
-  private String title;
-  @NotNull
-  private String description;
-  @NotNull
-  private String imageUrl;
-  @NotNull
-  private UUID userId;
+    @Id
+    private UUID id;
+    @NotNull
+    private String title;
+    @NotNull
+    private String description;
+    @NotNull
+    private String imageUrl;
+    @NotNull
+    private UUID userId;
 
-  private List<UUID> likes;
+    private List<UUID> likes;
 
-  private List<Comment> comments;
+    private List<Comment> comments;
 
-  @CreatedDate
-  private LocalDateTime date;
+    @CreatedDate
+    private LocalDateTime date;
 
-  public Moment(String title, String description, String imageUrl, UUID userId) {
-    this.setId();
-    this.date = Timestamp.getTimestamp();
-    this.title = title;
-    this.description = description;
-    this.imageUrl = imageUrl;
-    this.likes = new ArrayList<>();
-    this.comments = new ArrayList<>();
-    this.setUserId(userId);
+    public Moment(String title, String description, String imageUrl, UUID userId) {
+        this.setId();
+        this.date = Timestamp.getTimestamp();
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.likes = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.setUserId(userId);
 
-  }
+    }
 
-  public UUID getId() {
-    return id;
-  }
+    public UUID getId() {
+        return id;
+    }
 
-  public void setId() {
-    this.id = UUID.randomUUID();
-  }
+    public void setId() {
+        this.id = UUID.randomUUID();
+    }
 }
 

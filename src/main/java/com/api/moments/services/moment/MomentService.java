@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MomentService {
-    Moment create(CreateMomentRequest createMomentRequest, MultipartFile image);
+    MomentResponse create(CreateMomentRequest createMomentRequest, MultipartFile image);
 
-    List<Moment> getAll();
+    List<MomentResponse> getAll();
 
-    Moment getById(UUID id);
+    MomentResponse getById(UUID id);
+
+    Moment getByIdAux(UUID id);
 
     void update(UUID id, Moment updateMomentRequest);
 

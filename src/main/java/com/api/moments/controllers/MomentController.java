@@ -1,8 +1,8 @@
 package com.api.moments.controllers;
 
-import com.api.moments.persistence.entities.Moment;
 import com.api.moments.services.moment.MomentService;
 import com.api.moments.services.moment.request.CreateMomentRequest;
+import com.api.moments.services.moment.response.MomentResponse;
 import com.api.moments.services.security.IJwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,14 +25,13 @@ public class MomentController extends BaseController {
     private MomentService momentService;
 
     @GetMapping("/all")
-    public List<Moment> getAllMoments() {
-
+    public List<MomentResponse> getAllMoments() {
         return this.momentService.getAll();
     }
 
     @GetMapping("/{momentId}")
-    public ResponseEntity<Moment> getMomentById(@PathVariable UUID momentId) {
-        Moment moment = this.momentService.getById(momentId);
+    public ResponseEntity<MomentResponse> getMomentById(@PathVariable UUID momentId) {
+        var moment = this.momentService.getById(momentId);
         if (Objects.isNull(moment)) {
             return ResponseEntity.notFound().build();
         }
@@ -41,7 +40,7 @@ public class MomentController extends BaseController {
 
 
     @PostMapping("/new-moment")
-    public ResponseEntity<Moment> newMoment(
+    public ResponseEntity<MomentResponse> newMoment(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam("image") MultipartFile image, @RequestParam("title") String title,
             @RequestParam("description") String description) throws IOException {
@@ -49,7 +48,7 @@ public class MomentController extends BaseController {
         try {
             var userId = jwtService.getUserId(authorizationHeader);
             var createMomentRequest = new CreateMomentRequest(title, description, userId);
-            Moment moment = this.momentService.create(createMomentRequest, image);
+            var moment = this.momentService.create(createMomentRequest, image);
             return ResponseEntity.status(HttpStatus.CREATED).body(moment);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

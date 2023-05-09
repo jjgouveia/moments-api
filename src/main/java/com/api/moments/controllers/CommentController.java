@@ -45,6 +45,4 @@ public class CommentController extends BaseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-
 }

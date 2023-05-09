@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -25,7 +26,7 @@ public class MomentServiceImpl implements MomentService {
     private IFileUploadService fileUploadService;
 
     @Override
-    public Moment create(CreateMomentRequest createMomentRequest, MultipartFile image) {
+    public MomentResponse create(CreateMomentRequest createMomentRequest, MultipartFile image) {
 
         if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
             throw new RuntimeException("Only images are supported!");
@@ -38,6 +39,7 @@ public class MomentServiceImpl implements MomentService {
         Moment moment = new Moment(createMomentRequest.getTitle(), createMomentRequest.getDescription(),
                 createMomentRequest.getImageUrl(), createMomentRequest.getUserId());
 
+
         try {
             var fileName = moment.getId() + Objects.requireNonNull(image.getOriginalFilename())
                     .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
@@ -48,16 +50,39 @@ public class MomentServiceImpl implements MomentService {
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
-        return moment;
+
+        MomentResponse response = new MomentResponse();
+        response.setId(moment.getId());
+        response.setTitle(moment.getTitle());
+        response.setDescription(moment.getDescription());
+        response.setImageUrl(moment.getImageUrl());
+        response.setUserId(moment.getUserId());
+        response.setLikes(moment.getLikes());
+        response.setComments(moment.getComments());
+        response.setDate(moment.getDate());
+
+        return response;
     }
 
     @Override
-    public List<Moment> getAll() {
-        return this.momentRepository.findAll();
+    public List<MomentResponse> getAll() {
+        List<Moment> moments = this.momentRepository.findAll();
+        List<MomentResponse> momentResponses = new ArrayList<>();
+        for (Moment moment : moments) {
+            momentResponses.add(new MomentResponse(moment));
+        }
+        return momentResponses;
     }
 
     @Override
-    public Moment getById(UUID id) {
+    public MomentResponse getById(UUID id) {
+        Moment moment = this.momentRepository.findById(id).orElse(null);
+        assert moment != null;
+        return toResponse(moment);
+    }
+
+    @Override
+    public Moment getByIdAux(UUID id) {
         return this.momentRepository.findById(id).orElse(null);
     }
 
@@ -92,5 +117,19 @@ public class MomentServiceImpl implements MomentService {
         } else {
             throw new RuntimeException("Moment not found");
         }
+    }
+
+    public MomentResponse toResponse(Moment moment) {
+        MomentResponse response = new MomentResponse();
+        assert moment != null;
+        response.setId(moment.getId());
+        response.setTitle(moment.getTitle());
+        response.setDescription(moment.getDescription());
+        response.setImageUrl(moment.getImageUrl());
+        response.setUserId(moment.getUserId());
+        response.setLikes(moment.getLikes());
+        response.setComments(moment.getComments());
+        response.setDate(moment.getDate());
+        return response;
     }
 }
