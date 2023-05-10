@@ -37,23 +37,25 @@ public class JwtService implements IJwtService {
   public boolean isValidToken(String token) throws InvalidTokenException {
     String tokenizer = token.replace("Bearer ", "");
 
+
     try {
       var claims =
           Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(tokenizer)
               .getBody();
 
       var subject = claims.getSubject();
-      var tExpiration = claims.getExpiration();
-      var userId = UUID.fromString(subject);
 
-      if (!userId.toString().equals(subject) || tExpiration.before(new Date())) {
+      var tExpiration = claims.getExpiration();
+
+      if (!subject.equals(subject) || tExpiration.before(new Date())) {
         throw new InvalidTokenException("Invalid or expired token");
       }
+      return true;
     } catch (JwtException e) {
       throw new InvalidTokenException("Invalid token");
     }
-    return false;
   }
+
 
   @Override
   public UUID getUserId(String token) {
