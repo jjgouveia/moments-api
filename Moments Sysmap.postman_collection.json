@@ -1,0 +1,601 @@
+{
+	"info": {
+		"_postman_id": "75f3fba5-ed35-4ab1-8901-4acaa6340186",
+		"name": "Moments Sysmap",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25066694"
+	},
+	"item": [
+		{
+			"name": "Moments",
+			"item": [
+				{
+					"name": "Insert A Moment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWU0M2Q1Mi05ZTQwLTRmZGUtODBjZS04YzAwMWQ2ZGQzZDQiLCJpYXQiOjE2ODM2NjMxMzgsImV4cCI6MTY4MzY3MDMzOH0.kbYEG9ztrVGS96mbp4ttiOwqvHyXy3A6kkisLQ9eVJQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "userId",
+								"value": "hacked",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Particularidades",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Eu e eu",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Jr/Desktop/1658088229804.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URLAPI}}new-moment",
+							"host": [
+								"{{URLAPI}}new-moment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Moments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "BEARER Mg.VIuXUECJKcF6-K8bB4z5YFdn9GQHwNus0nXt05djM1ag3E8TjIU10hL-VJs7",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{URLAPI}}all",
+							"host": [
+								"{{URLAPI}}all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Moment by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URLAPI}}1ccaefba-3dd6-466b-81f0-87de1aeb3938",
+							"host": [
+								"{{URLAPI}}1ccaefba-3dd6-466b-81f0-87de1aeb3938"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete A Moment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URLAPI}}c9ef3617-678f-4239-ba4e-7f410200d2a5",
+							"host": [
+								"{{URLAPI}}c9ef3617-678f-4239-ba4e-7f410200d2a5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update A Moment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Atualizando de leve",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Tomei todas e fique mais feliz!!!",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Jr/Pictures/Screenshots/Screenshot (2).png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/moments/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"moments",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Add A Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "ôi de boto",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URLAPI}}ad26c81e-8cab-4e97-b406-254e6e0909d9/comment",
+							"host": [
+								"{{URLAPI}}ad26c81e-8cab-4e97-b406-254e6e0909d9"
+							],
+							"path": [
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/moment/comment/4582f04c-2ff4-4fa0-a7fe-e1d7adf500cd/37c52892-9698-494a-b246-e2f145a3f07e/remove",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"moment",
+								"comment",
+								"4582f04c-2ff4-4fa0-a7fe-e1d7adf500cd",
+								"37c52892-9698-494a-b246-e2f145a3f07e",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "acho que vai",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URLAPI}}de015775-ccb0-4ed2-9350-71e8d3d537a6/comment/00343708-80f7-4a2c-b018-9ebf8c6a75bb/update",
+							"host": [
+								"{{URLAPI}}de015775-ccb0-4ed2-9350-71e8d3d537a6"
+							],
+							"path": [
+								"comment",
+								"00343708-80f7-4a2c-b018-9ebf8c6a75bb",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "userId",
+								"value": "hacked",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URLAPI}}user/all",
+							"host": [
+								"{{URLAPI}}user"
+							],
+							"path": [
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Username",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URLAPI}}user/thais",
+							"host": [
+								"{{URLAPI}}user"
+							],
+							"path": [
+								"thais"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"jrg\",\r\n    \"email\": \"jrg@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URLAPI}}user/new-user",
+							"host": [
+								"{{URLAPI}}user"
+							],
+							"path": [
+								"new-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URLAPI}}user/update",
+							"host": [
+								"{{URLAPI}}user"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/4",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login request",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "BEARER Mg.VIuXUECJKcF6-K8bB4z5YFdn9GQHwNus0nXt05djM1ag3E8TjIU10hL-VJs7",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"jrg@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URLAPI}}auth",
+							"host": [
+								"{{URLAPI}}auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Like",
+			"item": [
+				{
+					"name": "Like a Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlN2NlYjdmZS04YmUyLTQwMzYtOTZkZC0yN2UxODJjNGJhNTkiLCJpYXQiOjE2ODM0OTQxMzIsImV4cCI6MTY4MzUwMTMzMn0.qeX8GfJiNHNMJ03dwHNFrNCN459QgxVujXXocR2wE5k",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/moment/like/20c196e8-0109-40cc-817b-ac4772f34482",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"moment",
+								"like",
+								"20c196e8-0109-40cc-817b-ac4772f34482"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove like",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URLAPI}}1ccaefba-3dd6-466b-81f0-87de1aeb3938/like/remove",
+							"host": [
+								"{{URLAPI}}1ccaefba-3dd6-466b-81f0-87de1aeb3938"
+							],
+							"path": [
+								"like",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Follow",
+			"item": [
+				{
+					"name": "Follow an User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkMzllMWIwMy1jODQ1LTQyYzItYjUwNC00YzBjMmJkZTcyYWIiLCJpYXQiOjE2ODM2MDA2OTcsImV4cCI6MTY4MzYwNzg5N30.oGk4OG1WXAPhHLD726NvqGW2xkxyjpxXUnrjili0Nnk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URLAPI}}user/thais/follow",
+							"host": [
+								"{{URLAPI}}user"
+							],
+							"path": [
+								"thais",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollow an User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URLAPI}}/user/thais/unfollow",
+							"host": [
+								"{{URLAPI}}"
+							],
+							"path": [
+								"user",
+								"thais",
+								"unfollow"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feed",
+			"item": [
+				{
+					"name": "Feed",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmMTU3NTRiMS04MzJhLTQ3MDAtYWU3Yy0wYmFmMmEwMGJkMTMiLCJpYXQiOjE2ODM2NTAwNTEsImV4cCI6MTY4MzY1NzI1MX0.cmfuf8ykk40WEmv1VV1W8XXn81sPdJcjo142g-BhINk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URLAPI}}feed",
+							"host": [
+								"{{URLAPI}}feed"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGDciOiJIUzI1NiJ9.eyJzdWIiOiJkMzllMWIwMy1jODQ1LTQyYzItYjUwNC00YzBjMmJkZTcyYWIiLCJpYXQiOjE2ODM2MDA2OTcsImV4cCI6MTY4MzYwNzg5N30.oGk4OG1WXAPhHLD726NvqGW2xkxyjpxXUnrjili0Nnk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URLAPI}}feed",
+					"host": [
+						"{{URLAPI}}feed"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWU0M2Q1Mi05ZTQwLTRmZGUtODBjZS04YzAwMWQ2ZGQzZDQiLCJpYXQiOjE2ODM2NjMxMzgsImV4cCI6MTY4MzY3MDMzOH0.kbYEG9ztrVGS96mbp4ttiOwqvHyXy3A6kkisLQ9eVJQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URLAPI",
+			"value": "http://localhost:8080/api/v1/moments/"
+		}
+	]
+}

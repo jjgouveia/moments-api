@@ -41,7 +41,6 @@ public class AuthService implements IAuthService {
     var response = new AuthResponse();
     response.setUserId(user.getId());
     response.setToken(token);
-
     return response;
   }
 }
