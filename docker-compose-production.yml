@@ -27,6 +27,15 @@ services:
       - ./tmp/localstack:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
+  moments-app:
+    image: jjgouveia/moments-app:latest
+    build: .
+    container_name: moments-app
+    ports:
+      - "8080:8080"
+
+
+
 volumes:
   data: { }
 
