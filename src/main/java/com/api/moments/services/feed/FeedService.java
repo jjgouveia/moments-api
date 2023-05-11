@@ -14,28 +14,39 @@ import java.util.UUID;
 @Service
 public class FeedService implements IFeedService {
 
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    @Autowired
-    private MomentService momentService;
+  @Autowired
+  private MomentService momentService;
 
-    @Override
-    public List<MomentResponse> getFeed(String token) {
-        User user = this.userService.getUserById(UUID.fromString(token));
-        List<UUID> followingIds = user.getFollowing();
-        List<MomentResponse> feed = new ArrayList<>();
-        for (UUID followingId : followingIds) {
-            List<MomentResponse> moments = this.momentService.getMomentsByOrderDescThroughUserId(followingId);
-            feed.addAll(moments);
-        }
+  @Override
+  public List<MomentResponse> getFeed(String token, int page, int pageSize) {
+    User user = this.userService.getUserById(UUID.fromString(token));
+    List<UUID> followingIds = user.getFollowing();
+    List<MomentResponse> feed = new ArrayList<>();
 
-        MomentResponse momentReponse = new MomentResponse();
-
-
-        feed.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
-        return feed;
-
+    if (page < 1 || pageSize < 1) {
+      page = 1;
+      pageSize = 10;
     }
+
+    int startIndex = (page - 1) * pageSize;
+    int endIndex = startIndex + pageSize;
+
+    for (UUID followingId : followingIds) {
+      List<MomentResponse> moments =
+          this.momentService.getMomentsByOrderDescThroughUserId(followingId);
+      feed.addAll(moments);
+    }
+
+    feed.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
+
+    if (endIndex > feed.size()) {
+      endIndex = feed.size();
+    }
+
+    return feed.subList(startIndex, endIndex);
+  }
 
 }
