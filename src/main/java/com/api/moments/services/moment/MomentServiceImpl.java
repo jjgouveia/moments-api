@@ -37,7 +37,7 @@ public class MomentServiceImpl implements MomentService {
     var imageUri = "";
 
     Moment moment = new Moment(createMomentRequest.getTitle(), createMomentRequest.getDescription(),
-        createMomentRequest.getImageUrl(), createMomentRequest.getUserId());
+        createMomentRequest.getImageUrl(), createMomentRequest.getUserId(), user.getUsername());
 
 
     try {
@@ -54,6 +54,7 @@ public class MomentServiceImpl implements MomentService {
     MomentResponse response = new MomentResponse();
     response.setId(moment.getId());
     response.setTitle(moment.getTitle());
+    response.setUsername(moment.getUsername());
     response.setDescription(moment.getDescription());
     response.setImageUrl(moment.getImageUrl());
     response.setUserId(moment.getUserId());
@@ -94,9 +95,6 @@ public class MomentServiceImpl implements MomentService {
     if (moment == null)
       throw new RuntimeException("Moment not found");
 
-    if (!moment.getUserId().equals(user.getId()))
-      throw new RuntimeException("You can't update this moment");
-
     moment.setTitle(updateMomentRequest.getTitle());
     moment.setDescription(updateMomentRequest.getDescription());
     moment.setImageUrl(updateMomentRequest.getImageUrl());
@@ -105,6 +103,8 @@ public class MomentServiceImpl implements MomentService {
 
     this.momentRepository.save(moment);
   }
+
+
 
   @Override
   public List<MomentResponse> getMomentsByOrderDescThroughUserId(UUID userId) {
@@ -123,6 +123,17 @@ public class MomentServiceImpl implements MomentService {
       throw new RuntimeException("You can't delete this moment");
 
     this.momentRepository.delete(moment);
+  }
+
+  @Override
+  public void updateLikes(UUID id, Moment updateMomentRequest) {
+    Moment moment = this.momentRepository.findById(id).orElse(null);
+
+    if (moment == null)
+      throw new RuntimeException("Moment not found");
+    moment.setLikes(updateMomentRequest.getLikes());
+
+    this.momentRepository.save(moment);
   }
 
   public MomentResponse toResponse(Moment moment) {
