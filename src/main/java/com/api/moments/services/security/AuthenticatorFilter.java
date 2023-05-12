@@ -25,7 +25,17 @@ public class AuthenticatorFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
+    response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    response.setHeader("Access-Control-Allow-Headers",
+        "Authorization, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers");
+    response.setHeader("Access-Control-Max-Age", "3600");
 
+    if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+      response.setStatus(HttpStatus.OK.value());
+      return;
+    }
 
     if (request.getServletPath().contains("/api/v1/moments/auth")) {
       filterChain.doFilter(request, response);
@@ -37,12 +47,19 @@ public class AuthenticatorFilter extends OncePerRequestFilter {
       return;
     }
 
+    if (request.getServletPath().contains("doodly")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     if (request.getServletPath().contains("swagger") || request.getServletPath().contains("docs")) {
       filterChain.doFilter(request, response);
       return;
     }
 
     var token = request.getHeader("Authorization");
+
+
 
     if (token == null || !token.startsWith("Bearer ")) {
       response.getWriter().write("Expired or Invalid token");

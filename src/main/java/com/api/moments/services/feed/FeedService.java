@@ -3,6 +3,7 @@ package com.api.moments.services.feed;
 import com.api.moments.persistence.entities.User;
 import com.api.moments.services.moment.MomentService;
 import com.api.moments.services.moment.response.MomentResponse;
+import com.api.moments.services.security.IJwtService;
 import com.api.moments.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,15 @@ public class FeedService implements IFeedService {
   private UserService userService;
 
   @Autowired
+  private IJwtService jwtService;
+
+  @Autowired
   private MomentService momentService;
 
   @Override
   public List<MomentResponse> getFeed(String token, int page, int pageSize) {
-    User user = this.userService.getUserById(UUID.fromString(token));
+    UUID userId = this.jwtService.getUserId(token);
+    User user = this.userService.getUserById(userId);
     List<UUID> followingIds = user.getFollowing();
     List<MomentResponse> feed = new ArrayList<>();
 
