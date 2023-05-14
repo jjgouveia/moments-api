@@ -9,12 +9,30 @@ import java.util.UUID;
 @Data
 @Document
 public class Profile {
-    @Id
-    private UUID id;
-    private String name;
-    private String profilePicture;
-    private String bio;
-    private String location;
-    private String website;
-    private String birthday;
+  @Id
+  private UUID id;
+  private String name;
+  private String username;
+  private String profilePicture;
+  private String bio;
+  private String location;
+  private String website;
+  private String birthday;
+
+
+  public Profile(UUID userId, String name, String username, String profilePicture, String bio,
+      String location, String website, String birthday) {
+    this.setId(userId);
+    this.name = name;
+    this.username = username;
+    this.profilePicture = profilePicture;
+    this.bio = bio;
+    this.location = location;
+    this.website = website;
+    this.birthday = birthday;
+  }
+
+  public void setId(UUID userId) {
+    this.id = userId;
+  }
 }
