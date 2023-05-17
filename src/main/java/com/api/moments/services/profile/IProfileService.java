@@ -2,8 +2,12 @@ package com.api.moments.services.profile;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface IProfileService {
-  ProfileResponse getProfile(String userId);
+import java.util.UUID;
 
-  ProfileResponse createProfile(ProfileRequest profileRequest, MultipartFile image);
+public interface IProfileService {
+    ProfileResponse getProfileByUsername(String username);
+
+    ProfileResponse getProfileByUserId(UUID userId);
+
+    ProfileResponse createProfile(ProfileRequest profileRequest, MultipartFile image);
 }
