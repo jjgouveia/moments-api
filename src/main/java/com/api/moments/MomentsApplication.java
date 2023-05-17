@@ -13,12 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/moments")
 
 public class MomentsApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(MomentsApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(MomentsApplication.class, args);
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  //  @Bean
+  //  public WebMvcConfigurer corsConfigurer() {
+  //    return new WebMvcConfigurer() {
+  //      @Override
+  //      public void addCorsMappings(CorsRegistry registry) {
+  //        registry.addMapping("/**").allowedOrigins("*")
+  //            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").allowedHeaders("*");
+  //      }
+  //    };
+  //  }
 }

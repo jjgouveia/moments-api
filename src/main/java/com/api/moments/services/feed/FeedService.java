@@ -3,6 +3,7 @@ package com.api.moments.services.feed;
 import com.api.moments.persistence.entities.User;
 import com.api.moments.services.moment.MomentService;
 import com.api.moments.services.moment.response.MomentResponse;
+import com.api.moments.services.security.IJwtService;
 import com.api.moments.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,24 +19,39 @@ public class FeedService implements IFeedService {
     private UserService userService;
 
     @Autowired
+    private IJwtService jwtService;
+
+    @Autowired
     private MomentService momentService;
 
     @Override
-    public List<MomentResponse> getFeed(String token) {
-        User user = this.userService.getUserById(UUID.fromString(token));
+    public List<MomentResponse> getFeed(String token, int page, int pageSize) {
+        UUID userId = this.jwtService.getUserId(token);
+        User user = this.userService.getUserById(userId);
         List<UUID> followingIds = user.getFollowing();
         List<MomentResponse> feed = new ArrayList<>();
+
+        if (page < 1 || pageSize < 1) {
+            page = 1;
+            pageSize = 10;
+        }
+
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = startIndex + pageSize;
+
         for (UUID followingId : followingIds) {
-            List<MomentResponse> moments = this.momentService.getMomentsByOrderDescThroughUserId(followingId);
+            List<MomentResponse> moments =
+                    this.momentService.getMomentsByOrderDescThroughUserId(followingId);
             feed.addAll(moments);
         }
 
-        MomentResponse momentReponse = new MomentResponse();
-
-
         feed.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
-        return feed;
 
+        if (endIndex > feed.size()) {
+            endIndex = feed.size();
+        }
+
+        return feed.subList(startIndex, endIndex);
     }
 
 }

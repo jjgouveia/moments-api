@@ -5,5 +5,5 @@ import com.api.moments.services.moment.response.MomentResponse;
 import java.util.List;
 
 public interface IFeedService {
-    List<MomentResponse> getFeed(String userId);
+  List<MomentResponse> getFeed(String userId, int page, int pageSize);
 }

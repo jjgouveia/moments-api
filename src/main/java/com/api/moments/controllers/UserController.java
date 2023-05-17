@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class UserController extends BaseController {
@@ -26,6 +27,16 @@ public class UserController extends BaseController {
     public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
         try {
             UserResponse user = this.userService.getUserByUsername(username);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/user/id/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+        try {
+            User user = this.userService.getUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

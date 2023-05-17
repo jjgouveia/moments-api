@@ -47,7 +47,7 @@ Default output format [None]: json
 Após isso, é necessário executar o seguinte comando para criar o bucket:
 
 ```shell
-aws --endpoint-url=http://localhost:4566 s3 mb s3://moments
+aws --endpoint-url=http://localhost:4566 s3 mb s3://moments-bucket
 ```
 
 # 📍 Author
