@@ -42,12 +42,13 @@ public class MomentController extends BaseController {
     @PostMapping("/new-moment")
     public ResponseEntity<MomentResponse> newMoment(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestParam("image") MultipartFile image, @RequestParam("title") String title,
-            @RequestParam("description") String description) throws IOException {
+            @RequestParam("photo") MultipartFile photo,
+            @RequestParam("title") String title,
+            @RequestParam("caption") String caption) throws IOException {
 
         try {
             var userId = jwtService.getUserId(authorizationHeader);
-            var createMomentRequest = new CreateMomentRequest(title, description, image, userId);
+            var createMomentRequest = new CreateMomentRequest(title, caption, photo, userId);
             var moment = this.momentService.create(createMomentRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(moment);
         } catch (Exception e) {

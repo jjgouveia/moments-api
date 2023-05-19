@@ -1,5 +1,6 @@
 package com.api.moments.services.user.response;
 
+import com.api.moments.persistence.entities.User;
 import lombok.Data;
 
 import java.util.List;
@@ -13,5 +14,17 @@ public class UserResponse {
   private String role;
   private List<UUID> followers;
   private List<UUID> following;
+
+  public UserResponse() {
+  }
+
+  public UserResponse(User user) {
+    this.id = user.getId();
+    this.username = user.getUsername();
+    this.email = user.getEmail();
+    this.role = user.getRole();
+    this.followers = user.getFollowers();
+    this.following = user.getFollowing();
+  }
 
 }

@@ -8,7 +8,8 @@ import java.util.UUID;
 
 @Repository
 public interface ProfileRepository extends MongoRepository<Profile, UUID> {
-    Profile findByUsername(String username);
+  Profile findByUsername(String username);
 
-    Profile findByUserId(UUID userId);
+
+  Profile findByUserId(UUID userId);
 }

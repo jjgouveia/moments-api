@@ -16,62 +16,64 @@ import java.util.UUID;
 @Service
 public class ProfileService implements IProfileService {
 
-    @Autowired
-    private ProfileRepository profileRepository;
+  @Autowired
+  private ProfileRepository profileRepository;
 
-    @Autowired
-    private IFileUploadService fileUploadService;
+  @Autowired
+  private IFileUploadService fileUploadService;
 
-    @Override
-    public ProfileResponse getProfileByUsername(String username) {
-        var profile = this.profileRepository.findByUsername(username);
 
-        if (profile == null) {
-            throw new RuntimeException("Profile not found");
-        }
+  @Override
+  public ProfileResponse getProfileByUsername(String username) {
+    var profile = this.profileRepository.findByUsername(username);
 
-        return new ProfileResponse(profile);
+    if (profile == null) {
+      throw new RuntimeException("Profile not found");
     }
 
-    @Override
-    public ProfileResponse getProfileByUserId(UUID userId) {
-        var profile = this.profileRepository.findByUserId(userId);
+    return new ProfileResponse(profile);
+  }
 
-        if (profile == null) {
-            throw new RuntimeException("Profile not found");
-        }
+  @Override
+  public ProfileResponse getProfileByUserId(UUID userId) {
+    var profile = this.profileRepository.findByUserId(userId);
 
-        return new ProfileResponse(profile);
+    if (profile == null) {
+      throw new RuntimeException("Profile not found");
     }
 
-    @Override
-    public ProfileResponse createProfile(ProfileRequest profileRequest, MultipartFile image) {
+    return new ProfileResponse(profile);
+  }
 
-        if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
-            throw new RuntimeException("Only images are supported!");
-        }
+  @Override
+  public ProfileResponse createProfile(ProfileRequest profileRequest, MultipartFile image) {
 
-        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-        var imageUri = "";
-
-
-        var profile = new Profile(user.getId(), profileRequest.getName(), user.getUsername(),
-                profileRequest.getProfilePicture(), profileRequest.getBio(), profileRequest.getLocation(),
-                profileRequest.getWebsite(), profileRequest.getBirthday());
-
-        try {
-            var fileName = profile.getId() + Objects.requireNonNull(image.getOriginalFilename())
-                    .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
-
-            imageUri = fileUploadService.upload(image, fileName);
-            profile.setProfilePicture(imageUri);
-            this.profileRepository.save(profile);
-        } catch (Exception e) {
-            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
-        }
-
-        return new ProfileResponse(profile);
-
+    if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
+      throw new RuntimeException("Only images are supported!");
     }
+
+    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+    var imageUri = "";
+
+
+
+    var profile = new Profile(user, profileRequest.getName(), profileRequest.getProfilePicture(),
+        profileRequest.getBio(), profileRequest.getLocation(), profileRequest.getWebsite(),
+        profileRequest.getBirthday());
+
+    try {
+      var fileName = profile.getId() + Objects.requireNonNull(image.getOriginalFilename())
+          .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
+
+      imageUri = fileUploadService.upload(image, fileName);
+      profile.setProfilePicture(imageUri);
+      this.profileRepository.save(profile);
+    } catch (Exception e) {
+      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+    }
+
+    return new ProfileResponse(profile);
+
+  }
 }
