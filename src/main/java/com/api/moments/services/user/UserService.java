@@ -10,30 +10,33 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    User create(CreateUserRequest createUserRequest);
+  User create(CreateUserRequest createUserRequest);
 
-    List<User> getAll();
+  List<User> getAll();
 
-    boolean existsByUsernameAndEmail(String username, String email);
+  boolean existsByUsernameAndEmail(String username, String email);
 
-    boolean existsByUsername(String username);
+  boolean existsByUsername(String username);
 
-    boolean existsByEmail(String email);
+  boolean existsByEmail(String email);
 
-    User getUser(String email);
+  User getUser(String email);
 
-    UserResponse getUserByUsername(String username);
+  UserResponse getUserByUsername(String username);
 
-    User getUserById(UUID id);
+  User getUserById(UUID id);
 
-    User updateUser(String token, UpdateUserRequest updateUserRequest);
+  User updateUser(String token, UpdateUserRequest updateUserRequest);
 
-    void updateSimpleUser(String token, SimpleUpdateUserRequest updateUserRequest);
+  void updateSimpleUser(String token, SimpleUpdateUserRequest updateUserRequest);
 
-    void addFollow(String token, String followId);
 
-    void removeFollow(String token, String followId);
+  void updateUserMoments(UUID userId, UUID momentId);
 
-    boolean hasFollowed(String userId, String userIdToFollow);
+  void addFollow(String token, String followId);
+
+  void removeFollow(String token, String followId);
+
+  boolean hasFollowed(String userId, String userIdToFollow);
 
 }

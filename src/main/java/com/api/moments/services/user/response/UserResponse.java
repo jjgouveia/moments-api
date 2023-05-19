@@ -14,6 +14,7 @@ public class UserResponse {
   private String role;
   private List<UUID> followers;
   private List<UUID> following;
+  private List<UUID> moments;
 
   public UserResponse() {
   }
@@ -25,6 +26,7 @@ public class UserResponse {
     this.role = user.getRole();
     this.followers = user.getFollowers();
     this.following = user.getFollowing();
+    this.moments = user.getMoments();
   }
 
 }

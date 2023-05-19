@@ -5,6 +5,7 @@ import com.api.moments.persistence.entities.Profile;
 import com.api.moments.persistence.entities.User;
 import com.api.moments.persistence.repositories.ProfileRepository;
 import com.api.moments.services.fileUpload.IFileUploadService;
+import com.api.moments.services.user.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,24 +26,52 @@ public class ProfileService implements IProfileService {
 
   @Override
   public ProfileResponse getProfileByUsername(String username) {
-    var profile = this.profileRepository.findByUsername(username);
+    Profile profile = this.profileRepository.findByUsername(username);
+
+    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
     if (profile == null) {
       throw new RuntimeException("Profile not found");
     }
 
-    return new ProfileResponse(profile);
+    ProfileResponse response = new ProfileResponse();
+    response.setId(profile.getId());
+    response.setBio(profile.getBio());
+    response.setBirthday(profile.getBirthday());
+    response.setLocation(profile.getLocation());
+    response.setName(profile.getName());
+    response.setProfilePicture(profile.getProfilePicture());
+    response.setWebsite(profile.getWebsite());
+    response.setUser(new UserResponse(user));
+
+
+
+    return response;
   }
 
   @Override
   public ProfileResponse getProfileByUserId(UUID userId) {
     var profile = this.profileRepository.findByUserId(userId);
 
+    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
     if (profile == null) {
       throw new RuntimeException("Profile not found");
     }
 
-    return new ProfileResponse(profile);
+    ProfileResponse response = new ProfileResponse();
+    response.setId(profile.getId());
+    response.setBio(profile.getBio());
+    response.setBirthday(profile.getBirthday());
+    response.setLocation(profile.getLocation());
+    response.setName(profile.getName());
+    response.setProfilePicture(profile.getProfilePicture());
+    response.setWebsite(profile.getWebsite());
+    response.setUser(new UserResponse(user));
+
+
+
+    return response;
   }
 
   @Override

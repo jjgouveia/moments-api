@@ -22,6 +22,7 @@ public class User {
   private String role;
   private List<UUID> followers;
   private List<UUID> following;
+  private List<UUID> moments;
   @CreatedDate
   private LocalDateTime date;
 
@@ -32,6 +33,7 @@ public class User {
     this.setRole("USER");
     this.followers = new ArrayList<>();
     this.following = new ArrayList<>();
+    this.moments = new ArrayList<>();
     this.date = Timestamp.getTimestamp();
   }
 

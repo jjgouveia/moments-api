@@ -8,19 +8,21 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MomentService {
-    MomentResponse create(CreateMomentRequest createMomentRequest);
+  MomentResponse create(CreateMomentRequest createMomentRequest);
 
-    List<MomentResponse> getAll();
+  List<MomentResponse> getAll();
 
-    MomentResponse getById(UUID id);
+  List<MomentResponse> getMomentByUsername(String username);
 
-    Moment getByIdAux(UUID id);
+  MomentResponse getById(UUID id);
 
-    void update(UUID id, Moment updateMomentRequest);
+  Moment getByIdAux(UUID id);
 
-    List<MomentResponse> getMomentsByOrderDescThroughUserId(UUID userId);
+  void update(UUID id, Moment updateMomentRequest);
 
-    void delete(UUID id);
+  List<MomentResponse> getMomentsByOrderDescThroughUserId(UUID userId);
 
-    void updateLikes(UUID id, Moment updateMomentRequest);
+  void delete(UUID id);
+
+  void updateLikes(UUID id, Moment updateMomentRequest);
 }

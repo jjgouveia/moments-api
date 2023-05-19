@@ -24,7 +24,6 @@ public class Profile {
   public Profile() {
   }
 
-
   public Profile(User user, String name, String profilePicture, String bio, String location,
       String website, String birthday) {
     this.setId();

@@ -10,5 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface MomentRepository extends MongoRepository<Moment, UUID> {
-    List<MomentResponse> findByUserIdOrderByDateDesc(UUID userId);
+  List<MomentResponse> findByUserIdOrderByDateDesc(UUID userId);
+
+  List<MomentResponse> findByUsername(String username);
 }

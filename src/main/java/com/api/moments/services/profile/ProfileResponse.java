@@ -17,6 +17,9 @@ public class ProfileResponse {
   private String website;
   private String birthday;
 
+  public ProfileResponse() {
+  }
+
   public ProfileResponse(Profile profile) {
     this.id = profile.getId();
     this.user = profile.getUser();

@@ -10,6 +10,5 @@ import java.util.UUID;
 public interface ProfileRepository extends MongoRepository<Profile, UUID> {
   Profile findByUsername(String username);
 
-
   Profile findByUserId(UUID userId);
 }
