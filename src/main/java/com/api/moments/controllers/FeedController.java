@@ -17,7 +17,7 @@ public class FeedController extends BaseController {
   @Autowired
   private FeedService feedService;
 
-  @GetMapping("/feed/{page}/{pageSize}")
+  @GetMapping("/feed/page/{page}/pageSize/{pageSize}")
   public ResponseEntity<List<MomentResponse>> getFeed(@PathVariable int page,
       @PathVariable int pageSize, @RequestHeader("Authorization") String token) {
 
