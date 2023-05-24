@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AwsConfig {
 
-  @Bean
-  public AmazonS3 amazonS3() {
-    return AmazonS3ClientBuilder.standard().withCredentials(
-        new AWSStaticCredentialsProvider(new BasicAWSCredentials("moments", "moments")) {
-        }).withEndpointConfiguration(
-        new AwsClientBuilder.EndpointConfiguration("http://s3.localhost.localstack.cloud:4566",
-            Regions.US_EAST_2.getName())).build();
-  }
+    @Bean
+    public AmazonS3 amazonS3() {
+        return AmazonS3ClientBuilder.standard().withCredentials(
+                new AWSStaticCredentialsProvider(new BasicAWSCredentials("moments", "moments")) {
+                }).withEndpointConfiguration(
+                new AwsClientBuilder.EndpointConfiguration("http://s3.localhost.localstack.cloud:4566",
+                        Regions.US_WEST_2.getName())).build();
+    }
 }

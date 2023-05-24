@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -223,6 +224,35 @@ public class UserServiceImpl implements UserService {
       throw new RuntimeException("User not found");
     }
 
+  }
+
+  @Override
+  public List<UserResponse> exploreUsersNotFollowed(String token) {
+    UUID userId = this.jwtService.getUserId(token);
+    System.out.println(userId);
+    Optional<User> user = this.userRepository.findById(userId);
+    System.out.println(user);
+
+    if (user.isPresent()) {
+      List<User> users = this.userRepository.findAll();
+      List<UserResponse> usersResponse = new ArrayList<>();
+      for (User u : users) {
+        if (!u.getId().equals(userId) && !u.getFollowers().contains(userId)) {
+          UserResponse userResponse = new UserResponse();
+          userResponse.setId(u.getId());
+          userResponse.setUsername(u.getUsername());
+          userResponse.setEmail(u.getEmail());
+          userResponse.setRole(u.getRole());
+          userResponse.setFollowers(u.getFollowers());
+          userResponse.setFollowing(u.getFollowing());
+          userResponse.setMoments(u.getMoments());
+          usersResponse.add(userResponse);
+        }
+      }
+      return usersResponse;
+    } else {
+      throw new RuntimeException("User not found");
+    }
   }
 
   @Override

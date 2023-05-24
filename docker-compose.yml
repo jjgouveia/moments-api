@@ -2,18 +2,15 @@ version: '3.7'
 
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo
     container_name: mongodb
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: moments_admin
-      MONGO_INITDB_ROOT_PASSWORD: moments_admin
     volumes:
-      - data:/data
+      - ./tmp/mongodb:/data/db
 
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack
     container_name: localstack
     ports:
       - "4566:4566"
@@ -27,9 +24,12 @@ services:
       - ./tmp/localstack:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
-volumes:
-  data: { }
-
-networks:
-  default:
-    name: mongodb_network
+#  moments-app:
+#    image: jjgouveia/moments-app:latest
+#    build: .
+#    container_name: moments-api
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - localstack
+#      - mongodb

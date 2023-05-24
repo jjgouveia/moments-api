@@ -17,92 +17,126 @@ import java.util.UUID;
 @Service
 public class ProfileService implements IProfileService {
 
-  @Autowired
-  private ProfileRepository profileRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
 
-  @Autowired
-  private IFileUploadService fileUploadService;
+    @Autowired
+    private IFileUploadService fileUploadService;
 
 
-  @Override
-  public ProfileResponse getProfileByUsername(String username) {
-    Profile profile = this.profileRepository.findByUsername(username);
+    @Override
+    public ProfileResponse getProfileByUsername(String username) {
+        Profile profile = this.profileRepository.findByUsername(username);
 
-    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-    if (profile == null) {
-      throw new RuntimeException("Profile not found");
+        if (profile == null) {
+            throw new RuntimeException("Profile not found");
+        }
+
+        ProfileResponse response = new ProfileResponse();
+        response.setId(profile.getId());
+        response.setBio(profile.getBio());
+        response.setBirthday(profile.getBirthday());
+        response.setLocation(profile.getLocation());
+        response.setName(profile.getName());
+        response.setProfilePicture(profile.getProfilePicture());
+        response.setWebsite(profile.getWebsite());
+        response.setUser(new UserResponse(user));
+
+
+        return response;
     }
 
-    ProfileResponse response = new ProfileResponse();
-    response.setId(profile.getId());
-    response.setBio(profile.getBio());
-    response.setBirthday(profile.getBirthday());
-    response.setLocation(profile.getLocation());
-    response.setName(profile.getName());
-    response.setProfilePicture(profile.getProfilePicture());
-    response.setWebsite(profile.getWebsite());
-    response.setUser(new UserResponse(user));
+    @Override
+    public ProfileResponse getProfileByUserId(UUID userId) {
+        var profile = this.profileRepository.findByUserId(userId);
+
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        if (profile == null) {
+            throw new RuntimeException("Profile not found");
+        }
+
+        ProfileResponse response = new ProfileResponse();
+        response.setId(profile.getId());
+        response.setUsername(profile.getUsername());
+        response.setBio(profile.getBio());
+        response.setBirthday(profile.getBirthday());
+        response.setLocation(profile.getLocation());
+        response.setName(profile.getName());
+        response.setProfilePicture(profile.getProfilePicture());
+        response.setWebsite(profile.getWebsite());
+        response.setUser(new UserResponse(user));
 
 
-
-    return response;
-  }
-
-  @Override
-  public ProfileResponse getProfileByUserId(UUID userId) {
-    var profile = this.profileRepository.findByUserId(userId);
-
-    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-    if (profile == null) {
-      throw new RuntimeException("Profile not found");
+        return response;
     }
 
-    ProfileResponse response = new ProfileResponse();
-    response.setId(profile.getId());
-    response.setBio(profile.getBio());
-    response.setBirthday(profile.getBirthday());
-    response.setLocation(profile.getLocation());
-    response.setName(profile.getName());
-    response.setProfilePicture(profile.getProfilePicture());
-    response.setWebsite(profile.getWebsite());
-    response.setUser(new UserResponse(user));
+    @Override
+    public ProfileResponse createProfile(ProfileRequest profileRequest, MultipartFile image) {
 
+        if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
+            throw new RuntimeException("Only images are supported!");
+        }
 
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-    return response;
-  }
+        var imageUri = "";
 
-  @Override
-  public ProfileResponse createProfile(ProfileRequest profileRequest, MultipartFile image) {
+        var profile = new Profile(user, profileRequest.getName(), profileRequest.getProfilePicture(),
+                profileRequest.getBio(), profileRequest.getLocation(), profileRequest.getWebsite(),
+                profileRequest.getBirthday());
 
-    if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
-      throw new RuntimeException("Only images are supported!");
+        try {
+            var fileName = profile.getId() + Objects.requireNonNull(image.getOriginalFilename())
+                    .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
+
+            imageUri = fileUploadService.upload(image, fileName);
+            profile.setProfilePicture(imageUri);
+            this.profileRepository.save(profile);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+        }
+
+        return new ProfileResponse(profile);
+
     }
 
-    User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    @Override
+    public ProfileResponse updateProfile(ProfileRequest profileRequest, MultipartFile image) {
 
-    var imageUri = "";
+        if (!Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
+            throw new RuntimeException("Only images are supported!");
+        }
 
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
+        var imageUri = "";
 
-    var profile = new Profile(user, profileRequest.getName(), profileRequest.getProfilePicture(),
-        profileRequest.getBio(), profileRequest.getLocation(), profileRequest.getWebsite(),
-        profileRequest.getBirthday());
+        var profile = this.profileRepository.findByUserId(user.getId());
 
-    try {
-      var fileName = profile.getId() + Objects.requireNonNull(image.getOriginalFilename())
-          .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
+        if (profile == null) {
+            return this.createProfile(profileRequest, image);
+        }
 
-      imageUri = fileUploadService.upload(image, fileName);
-      profile.setProfilePicture(imageUri);
-      this.profileRepository.save(profile);
-    } catch (Exception e) {
-      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+        profile.setName(profileRequest.getName());
+        profile.setBio(profileRequest.getBio());
+        profile.setLocation(profileRequest.getLocation());
+        profile.setWebsite(profileRequest.getWebsite());
+        profile.setBirthday(profileRequest.getBirthday());
+
+        try {
+            var fileName = profile.getId() + Objects.requireNonNull(image.getOriginalFilename())
+                    .substring(image.getOriginalFilename().lastIndexOf(".") + 1);
+
+            imageUri = fileUploadService.upload(image, fileName);
+            profile.setProfilePicture(imageUri);
+            this.profileRepository.save(profile);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+        }
+
+        return new ProfileResponse(profile);
     }
-
-    return new ProfileResponse(profile);
-
-  }
 }

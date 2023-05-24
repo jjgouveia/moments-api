@@ -32,9 +32,9 @@ public class FeedService implements IFeedService {
     followingIds.add(user.getId());
     List<MomentResponse> feed = new ArrayList<>();
 
-    if (page < 0 || pageSize < 1) {
+    if (page <= 0 || pageSize < 1) {
       page = 1;
-      pageSize = 10;
+      pageSize = 4;
     }
 
     int startIndex = (page - 1) * pageSize;

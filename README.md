@@ -35,21 +35,19 @@ E dentro do bash do localstack, executar o seguinte comando:
 aws configure --profile default
 ```
 
-E setar as seguintes configurações:
-
 ```shell
 AWS Access Key ID [None]: moments
 AWS Secret Access Key [None]: moments
-Default region name [None]: us-east-2
+Default region name [None]: us-west-2
 Default output format [None]: json
 ```
 
 Após isso, é necessário executar o seguinte comando para criar o bucket:
 
 ```shell
-aws --endpoint-url=http://localhost:4566 s3 mb s3://moments-bucket
+aws s3 mb s3://moments-bucket --endpoint-url=http://localhost:4566/
 ```
 
-# 📍 Author
+Made with ❤️ and ☕ by Jr Gouveia.
 
-Jarbas Gouveia.
+

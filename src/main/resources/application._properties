@@ -1,0 +1,6 @@
+spring.data.mongodb.uri=mongodb://moments_admin:moments_admin@localhost:27017/moments_db?authSource=admin
+spring.security.user.name=admin
+spring.security.user.password=123456
+app.secret.key=546A576D5A7134743777217A25432A462D4A614E645267556B58703272357538
+app.token.expiration=7200000
+spring.servlet.multipart.max-file-size=10MB

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.api</groupId>
     <artifactId>moments</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>moments</name>
     <description>Moments Social Media Project</description>
     <properties>

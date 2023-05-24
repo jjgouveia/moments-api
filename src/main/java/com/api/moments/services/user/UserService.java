@@ -26,6 +26,8 @@ public interface UserService {
 
   User getUserById(UUID id);
 
+  List<UserResponse> exploreUsersNotFollowed(String token);
+  
   User updateUser(String token, UpdateUserRequest updateUserRequest);
 
   void updateSimpleUser(String token, SimpleUpdateUserRequest updateUserRequest);

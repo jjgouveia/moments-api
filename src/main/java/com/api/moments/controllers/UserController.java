@@ -15,85 +15,97 @@ import java.util.UUID;
 
 @RestController
 public class UserController extends BaseController {
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    @GetMapping("/user/all")
-    public List<User> getAllUsers() {
-        return this.userService.getAll();
+  @GetMapping("/user/all")
+  public List<User> getAllUsers() {
+    return this.userService.getAll();
+  }
+
+  @GetMapping("/user/explore")
+  public ResponseEntity<List<UserResponse>> exploreUsersNotFollowed(
+      @RequestHeader("Authorization") String token) {
+    try {
+      List<UserResponse> users = this.userService.exploreUsersNotFollowed(token);
+      return ResponseEntity.status(HttpStatus.OK).body(users);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+  }
 
-    @GetMapping("/user/{username}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
-        try {
-            UserResponse user = this.userService.getUserByUsername(username);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+
+  @GetMapping("/user/{username}")
+  public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
+    try {
+      UserResponse user = this.userService.getUserByUsername(username);
+      return ResponseEntity.status(HttpStatus.OK).body(user);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+  }
 
-    @GetMapping("/user/id/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
-        try {
-            User user = this.userService.getUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+  @GetMapping("/user/id/{id}")
+  public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+    try {
+      User user = this.userService.getUserById(id);
+      return ResponseEntity.status(HttpStatus.OK).body(user);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+  }
 
-    @PostMapping("/user/new-user")
-    public ResponseEntity<String> newUser(@RequestBody CreateUserRequest createUserRequest) {
-        try {
-            this.userService.create(createUserRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+  @PostMapping("/user/new-user")
+  public ResponseEntity<String> newUser(@RequestBody CreateUserRequest createUserRequest) {
+    try {
+      this.userService.create(createUserRequest);
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+  }
 
-    @PatchMapping("/user/update")
-    public ResponseEntity<String> updateUser(@RequestBody SimpleUpdateUserRequest createUserRequest,
-                                             @RequestHeader("Authorization") String token) {
-        try {
-            this.userService.updateSimpleUser(token, createUserRequest);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (Exception e) {
-            if (e.getMessage().equals("User not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+  @PatchMapping("/user/update")
+  public ResponseEntity<String> updateUser(@RequestBody SimpleUpdateUserRequest createUserRequest,
+      @RequestHeader("Authorization") String token) {
+    try {
+      this.userService.updateSimpleUser(token, createUserRequest);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    } catch (Exception e) {
+      if (e.getMessage().equals("User not found")) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+  }
 
 
-    @PostMapping("/user/{username}/follow")
-    public ResponseEntity<String> followUser(@PathVariable String username,
-                                             @RequestHeader("Authorization") String token) {
-        try {
-            this.userService.addFollow(token, username);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (Exception e) {
-            if (e.getMessage().equals("User not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+  @PostMapping("/user/{username}/follow")
+  public ResponseEntity<String> followUser(@PathVariable String username,
+      @RequestHeader("Authorization") String token) {
+    try {
+      this.userService.addFollow(token, username);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    } catch (Exception e) {
+      if (e.getMessage().equals("User not found")) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+  }
 
-    @PostMapping("/user/{username}/unfollow")
-    public ResponseEntity<String> unfollowUser(@PathVariable String username,
-                                               @RequestHeader("Authorization") String token) {
-        try {
-            this.userService.removeFollow(token, username);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (Exception e) {
-            if (e.getMessage().equals("User not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+  @PostMapping("/user/{username}/unfollow")
+  public ResponseEntity<String> unfollowUser(@PathVariable String username,
+      @RequestHeader("Authorization") String token) {
+    try {
+      this.userService.removeFollow(token, username);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    } catch (Exception e) {
+      if (e.getMessage().equals("User not found")) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+  }
 
 }
