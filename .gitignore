@@ -1,5 +1,6 @@
 HELP.md
 target/
+tmp/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -29,7 +30,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /kafka-compose
-/tmp/
 
 ### VS Code ###
 .vscode/

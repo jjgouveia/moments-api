@@ -1,7 +1,6 @@
 package com.api.moments.persistence.entities;
 
 import com.api.moments.util.Timestamp;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,11 +13,8 @@ import java.util.UUID;
 public class Comment {
   @Id
   private UUID id;
-  @NotNull
   private String content;
-  @NotNull
   private UUID momentId;
-  @NotNull
   private UUID userId;
   private LocalDateTime createdAt;
 
